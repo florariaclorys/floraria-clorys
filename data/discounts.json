@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1",
+    "code": "CLORY10",
+    "type": "percentage",
+    "value": 10,
+    "minOrderValue": 100,
+    "maxUses": 100,
+    "usedCount": 5,
+    "expiresAt": "2025-12-31",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "code": "BUN_VENIT",
+    "type": "fixed",
+    "value": 25,
+    "minOrderValue": 150,
+    "maxUses": null,
+    "usedCount": 12,
+    "expiresAt": null,
+    "isActive": true
+  },
+  {
+    "code": "CLORY26",
+    "type": "percentage",
+    "value": 10,
+    "minOrderValue": 300,
+    "maxUses": null,
+    "expiresAt": "2026-07-17",
+    "isActive": true,
+    "id": "1779161095085",
+    "usedCount": 1
+  }
+]
