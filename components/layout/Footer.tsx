@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { getBusinessHours } from '@/lib/settings'
 
-export default function Footer() {
+export default async function Footer() {
+  const hours = await getBusinessHours()
   return (
     <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -12,7 +14,7 @@ export default function Footer() {
             <p className="font-cormorant text-4xl font-light text-white mb-2">Clory&apos;s</p>
             <p className="font-greatvibes text-2xl text-gold mb-4">Flowers With Heart</p>
             <p className="font-lato text-sm text-light opacity-80 leading-relaxed max-w-xs">
-              Creăm momente frumoase prin flori proaspete și aranjamente florale realizate cu dragoste și pasiune.
+              Cream momente frumoase prin flori proaspete si aranjamente florale realizate cu dragoste si pasiune.
             </p>
             <div className="flex gap-4 mt-6">
               {/* Instagram */}
@@ -59,7 +61,7 @@ export default function Footer() {
             <h3 className="font-lato text-xs tracking-[0.2em] uppercase font-bold text-gold mb-6">Navigare</h3>
             <ul className="space-y-3">
               {[
-                { href: '/', label: 'Acasă' },
+                { href: '/', label: 'Acasa' },
                 { href: '/catalog', label: 'Catalog Flori' },
                 { href: '/catalog?category=buchete', label: 'Buchete' },
                 { href: '/catalog?category=aranjamente', label: 'Aranjamente' },
@@ -100,20 +102,20 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="font-lato text-sm text-light/80">Strada Victoriei 28, Negrești Oaș</span>
+                <span className="font-lato text-sm text-light/80">Strada Victoriei 28, Negresti Oas</span>
               </div>
             </div>
 
             <h4 className="font-lato text-xs tracking-widest uppercase text-gold mb-3">Ore Program</h4>
             <div className="space-y-1">
               {[
-                ['Luni - Vineri', '09:00 - 19:00'],
-                ['Sâmbătă', '10:00 - 17:00'],
-                ['Duminică', 'Închis'],
-              ].map(([day, hours]) => (
+                ['Luni - Vineri', hours.weekdays],
+                ['Sambata', hours.saturday],
+                ['Duminica', hours.sunday],
+              ].map(([day, time]) => (
                 <div key={day} className="flex justify-between">
                   <span className="font-lato text-xs text-light/60">{day}</span>
-                  <span className="font-lato text-xs text-light/80 font-semibold">{hours}</span>
+                  <span className="font-lato text-xs text-light/80 font-semibold">{time}</span>
                 </div>
               ))}
             </div>
@@ -126,7 +128,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Floraria Clory&apos;s. Toate drepturile rezervate.
           </p>
           <p className="font-lato text-xs text-light/40">
-            Realizat cu ❤ în România
+            Realizat cu ❤ in Romania
           </p>
         </div>
       </div>
