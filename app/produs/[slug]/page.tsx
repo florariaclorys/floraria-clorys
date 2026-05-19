@@ -88,12 +88,20 @@ export default function ProductPage() {
           {/* Image */}
           <div>
             <div
-              className="product-img-placeholder rounded-lg flex items-center justify-center"
+              className="rounded-lg overflow-hidden flex items-center justify-center bg-[#f9eef1]"
               style={{ aspectRatio: '4/5' }}
             >
-              <span className="text-[8rem] filter drop-shadow-lg">
-                {categoryEmoji[product.category] || '🌸'}
-              </span>
+              {product.images?.[0] ? (
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-[8rem] filter drop-shadow-lg">
+                  {categoryEmoji[product.category] || '🌸'}
+                </span>
+              )}
             </div>
           </div>
 

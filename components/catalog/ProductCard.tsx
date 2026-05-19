@@ -40,9 +40,17 @@ export default function ProductCard({ product }: { product: Product }) {
         {/* Image area */}
         <div className="relative overflow-hidden" style={{ aspectRatio: '4/5' }}>
           <div className="w-full h-full product-img-placeholder flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
-            <span className="text-7xl filter drop-shadow-md">
-              {categoryEmoji[product.category] || '🌸'}
-            </span>
+            {product.images?.[0] ? (
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-7xl filter drop-shadow-md">
+                {categoryEmoji[product.category] || '🌸'}
+              </span>
+            )}
           </div>
 
           {/* Badges */}
