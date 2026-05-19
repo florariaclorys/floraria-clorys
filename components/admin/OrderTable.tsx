@@ -145,7 +145,7 @@ export default function OrderTable({ orders, onStatusChange }: OrderTableProps) 
                 <span>{selected.total} RON</span>
               </div>
               <p className="font-lato text-xs text-textdark/50 mt-1">
-                Plată: {selected.paymentMethod === 'ramburs' ? 'Ramburs la livrare' : 'Transfer bancar'}
+                Plată: Ramburs la livrare
               </p>
               {selected.giftMessage && (
                 <p className="font-lato text-xs text-textdark/60 mt-2 italic">
