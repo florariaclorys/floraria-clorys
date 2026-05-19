@@ -95,9 +95,9 @@ export default function Footer() {
             <h4 className="font-lato text-xs tracking-widest uppercase text-gold mb-3">Ore Program</h4>
             <div className="space-y-1">
               {[
-                ['Luni - Vineri', '08:00 - 20:00'],
-                ['Sâmbătă', '09:00 - 18:00'],
-                ['Duminică', '10:00 - 16:00'],
+                ['Luni - Vineri', '09:00 - 19:00'],
+                ['Sâmbătă', '10:00 - 17:00'],
+                ['Duminică', 'Închis'],
               ].map(([day, hours]) => (
                 <div key={day} className="flex justify-between">
                   <span className="font-lato text-xs text-light/60">{day}</span>
