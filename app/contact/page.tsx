@@ -103,7 +103,7 @@ export default function ContactPage() {
               <div className="space-y-5">
                 {[
                   { icon: '📞', label: 'Telefon', value: '0770 930 786', href: 'tel:0770930786' },
-                  { icon: '📧', label: 'Email', value: 'floraria@clorys.ro', href: 'mailto:floraria@clorys.ro' },
+                  { icon: '📧', label: 'Email', value: 'florariaclorys@gmail.com', href: 'mailto:florariaclorys@gmail.com' },
                   { icon: '📍', label: 'Adresă', value: 'Strada Victoriei 28, Negrești Oaș', href: null },
                 ].map(item => (
                   <div key={item.label} className="flex items-start gap-4">
