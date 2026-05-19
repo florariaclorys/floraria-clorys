@@ -40,50 +40,8 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* Teddy bear SVG */}
-            <svg width="52" height="56" viewBox="0 0 52 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0 drop-shadow-sm">
-              {/* Ears */}
-              <circle cx="10" cy="13" r="7" fill="#E8D5B0"/>
-              <circle cx="10" cy="13" r="4" fill="#D4B896"/>
-              <circle cx="42" cy="13" r="7" fill="#E8D5B0"/>
-              <circle cx="42" cy="13" r="4" fill="#D4B896"/>
-              {/* Body */}
-              <ellipse cx="26" cy="40" rx="15" ry="14" fill="#E8D5B0"/>
-              {/* Belly */}
-              <ellipse cx="26" cy="42" rx="8" ry="7" fill="#D4B896"/>
-              {/* Head */}
-              <circle cx="26" cy="22" r="14" fill="#E8D5B0"/>
-              {/* Snout */}
-              <ellipse cx="26" cy="27" rx="6" ry="4" fill="#D4B896"/>
-              {/* Eyes */}
-              <circle cx="21" cy="20" r="2" fill="#3D2010"/>
-              <circle cx="31" cy="20" r="2" fill="#3D2010"/>
-              {/* Eye shine */}
-              <circle cx="22" cy="19" r="0.7" fill="white"/>
-              <circle cx="32" cy="19" r="0.7" fill="white"/>
-              {/* Nose */}
-              <ellipse cx="26" cy="25" rx="2" ry="1.5" fill="#3D2010"/>
-              {/* Smile */}
-              <path d="M22 28 Q26 31 30 28" stroke="#3D2010" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-              {/* Left arm holding rose */}
-              <ellipse cx="12" cy="38" rx="4.5" ry="8" fill="#E8D5B0" transform="rotate(-20 12 38)"/>
-              {/* Right arm */}
-              <ellipse cx="40" cy="38" rx="4.5" ry="8" fill="#E8D5B0" transform="rotate(20 40 38)"/>
-              {/* Rose stem */}
-              <line x1="14" y1="44" x2="14" y2="28" stroke="#4a7c4e" strokeWidth="1.5" strokeLinecap="round"/>
-              {/* Rose leaves */}
-              <ellipse cx="11" cy="36" rx="3.5" ry="1.5" fill="#5a9e5e" transform="rotate(-30 11 36)"/>
-              {/* Rose flower */}
-              <circle cx="14" cy="26" r="5" fill="#C0392B"/>
-              <circle cx="14" cy="26" r="3.5" fill="#E74C3C"/>
-              <ellipse cx="12" cy="24" rx="2.5" ry="2" fill="#C0392B" transform="rotate(-20 12 24)"/>
-              <ellipse cx="16" cy="24" rx="2.5" ry="2" fill="#C0392B" transform="rotate(20 16 24)"/>
-              <circle cx="14" cy="26" r="1.5" fill="#922B21"/>
-              {/* Bow on head */}
-              <path d="M20 10 Q23 8 26 10 Q23 12 20 10Z" fill="#C4708A"/>
-              <path d="M32 10 Q29 8 26 10 Q29 12 32 10Z" fill="#C4708A"/>
-              <circle cx="26" cy="10" r="2" fill="#A0506A"/>
-            </svg>
+            {/* Teddy bears image */}
+            <img src="/images/ursulet.png" alt="ursulet" className="h-14 w-auto object-contain flex-shrink-0 drop-shadow-sm" />
             <div className="flex flex-col items-start">
               <span className={`font-lato text-xs tracking-[0.25em] uppercase font-light transition-colors ${logoSubColor}`}>
                 Floraria
