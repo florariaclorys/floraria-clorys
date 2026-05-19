@@ -6,9 +6,18 @@ import { useState, useEffect } from 'react'
 import { ShoppingBag, Menu, X, User } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 
+interface BusinessHours {
+  weekdays: string
+  saturday: string
+  sunday: string
+}
+
+const DEFAULT_HOURS: BusinessHours = { weekdays: '09:00–19:00', saturday: '10:00–17:00', sunday: 'Inchis' }
+
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [hours, setHours] = useState<BusinessHours>(DEFAULT_HOURS)
   const pathname = usePathname()
   const { cartCount } = useCart()
   const isHome = pathname === '/'
@@ -19,8 +28,15 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(data => setHours(data))
+      .catch(() => {})
+  }, [])
+
   const navLinks = [
-    { href: '/', label: 'Acasă' },
+    { href: '/', label: 'Acasa' },
     { href: '/catalog', label: 'Catalog' },
     { href: '/contact', label: 'Contact' },
   ]
@@ -40,7 +56,6 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* Teddy bears image */}
             <img src="/images/ursulet.png" alt="ursulet" className="h-14 w-auto object-contain flex-shrink-0 drop-shadow-sm" />
             <div className="flex flex-col items-start">
               <span className={`font-lato text-xs tracking-[0.25em] uppercase font-light transition-colors ${logoSubColor}`}>
@@ -90,9 +105,9 @@ export default function Header() {
 
             {/* Schedule */}
             <div className={`hidden lg:flex flex-col items-start leading-tight ${isHome && !isScrolled ? 'text-white/70' : 'text-textdark/50'}`}>
-              <span className="font-lato text-[10px] tracking-wide">L-V 09:00–19:00</span>
-              <span className="font-lato text-[10px] tracking-wide">S 10:00–17:00</span>
-              <span className={`font-lato text-[10px] tracking-wide ${isHome && !isScrolled ? 'text-white/50' : 'text-red-400'}`}>D Închis</span>
+              <span className="font-lato text-[10px] tracking-wide">L-V {hours.weekdays}</span>
+              <span className="font-lato text-[10px] tracking-wide">S {hours.saturday}</span>
+              <span className={`font-lato text-[10px] tracking-wide ${isHome && !isScrolled ? 'text-white/50' : 'text-red-400'}`}>D {hours.sunday}</span>
             </div>
 
             <button
@@ -131,7 +146,7 @@ export default function Header() {
             className="font-lato text-sm tracking-widest uppercase font-semibold text-textdark hover:text-accent transition-colors flex items-center gap-2"
           >
             <ShoppingBag size={16} />
-            Coș ({cartCount})
+            Cos ({cartCount})
           </Link>
         </nav>
       </div>
