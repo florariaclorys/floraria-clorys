@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import Header from './Header'
 import Footer from './Footer'
 import FloatingUI from './FloatingUI'
+import FeaturesBar from '@/components/home/FeaturesBar'
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname()
@@ -14,6 +15,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   return (
     <>
       <Header />
+      <FeaturesBar />
       <main className="min-h-screen">{children}</main>
       <Footer />
       <FloatingUI />
