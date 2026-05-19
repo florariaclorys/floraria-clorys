@@ -14,10 +14,7 @@ export default function ConfirmationPage() {
   useEffect(() => {
     fetch(`/api/orders/${id}`)
       .then(r => r.json())
-      .then(data => {
-        setOrder(data)
-        setLoading(false)
-      })
+      .then(data => { setOrder(data); setLoading(false); })
       .catch(() => setLoading(false))
   }, [id])
 
@@ -38,7 +35,6 @@ export default function ConfirmationPage() {
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
       <div className="max-w-2xl mx-auto px-4 py-12 text-center">
-        {/* Checkmark */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -70,7 +66,6 @@ export default function ConfirmationPage() {
             Vei primi un email de confirmare în scurt timp. Echipa noastră te va contacta pentru confirmare.
           </p>
 
-          {/* Order ID */}
           <div className="bg-light rounded-lg px-8 py-5 mb-8 inline-block">
             <p className="font-lato text-xs text-textdark/40 tracking-widest uppercase mb-1">Număr Comandă</p>
             <p className="font-cormorant text-3xl font-bold text-primary">{id}</p>
@@ -79,7 +74,6 @@ export default function ConfirmationPage() {
           {order && (
             <div className="bg-white border border-light rounded-lg p-6 text-left mb-8">
               <h2 className="font-cormorant text-xl font-semibold text-textdark mb-4">Detalii comandă</h2>
-
               <div className="space-y-2 mb-4">
                 {order.items.map(item => (
                   <div key={item.productId} className="flex justify-between font-lato text-sm">
@@ -88,14 +82,12 @@ export default function ConfirmationPage() {
                   </div>
                 ))}
               </div>
-
               <div className="border-t border-light pt-3 space-y-1">
                 <div className="flex justify-between font-cormorant text-xl font-bold text-primary">
                   <span>Total plătit</span>
                   <span>{order.total} RON</span>
                 </div>
               </div>
-
               <div className="mt-4 pt-4 border-t border-light space-y-2">
                 <div className="flex items-center gap-2 font-lato text-sm text-textdark/70">
                   <span className="text-base">📅</span>
@@ -106,34 +98,25 @@ export default function ConfirmationPage() {
                   <span><strong>Adresă:</strong> {order.customer.address}, {order.customer.city}</span>
                 </div>
                 <div className="flex items-center gap-2 font-lato text-sm text-textdark/70">
-                  <span className="text-base">💳</span>
-                  <span><strong>Plată:</strong> {order.paymentMethod === 'ramburs' ? 'Ramburs la livrare' : 'Transfer bancar'}</span>
+                  <span className="text-base">💵</span>
+                  <span><strong>Plată:</strong> Ramburs la livrare</span>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Contact */}
           <div className="bg-primary/5 border border-primary/10 rounded-lg p-5 mb-8">
             <p className="font-lato text-sm text-textdark/70">
               <strong className="text-textdark">Contact:</strong> pentru orice întrebări sau modificări, sunați la{' '}
-              <a href="tel:0700000000" className="text-primary font-bold hover:text-secondary transition-colors">
-                0700 000 000
-              </a>
+              <a href="tel:0700000000" className="text-primary font-bold hover:text-secondary transition-colors">0700 000 000</a>
               {' '}sau scrieți la{' '}
-              <a href="mailto:floraria@clorys.ro" className="text-primary font-bold hover:text-secondary transition-colors">
-                floraria@clorys.ro
-              </a>
+              <a href="mailto:floraria@clorys.ro" className="text-primary font-bold hover:text-secondary transition-colors">floraria@clorys.ro</a>
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/catalog" className="btn-primary">
-              Continuă cumpărăturile
-            </Link>
-            <Link href="/" className="btn-outline">
-              Înapoi la pagina principală
-            </Link>
+            <Link href="/catalog" className="btn-primary">Continuă cumpărăturile</Link>
+            <Link href="/" className="btn-outline">Înapoi la pagina principală</Link>
           </div>
         </motion.div>
       </div>
