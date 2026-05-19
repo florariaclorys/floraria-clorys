@@ -9,10 +9,10 @@ function isAdminAuthenticated(): boolean {
   return cookieStore.get('admin_session')?.value === 'authenticated'
 }
 
-export default function AdminDiscountsPage() {
+export default async function AdminDiscountsPage() {
   if (!isAdminAuthenticated()) redirect('/admin')
 
-  const discounts = getDiscounts()
+  const discounts = await getDiscounts()
 
   return (
     <AdminShell>

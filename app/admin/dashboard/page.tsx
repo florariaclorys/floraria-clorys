@@ -22,11 +22,11 @@ const STATUS_CONFIG: Record<Order['status'], { label: string; color: string }> =
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString('ro-RO', { day: '2-digit', month: '2-digit', year: 'numeric' })
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
   if (!isAdminAuthenticated()) redirect('/admin')
 
-  const orders = getOrders()
-  const products = getProducts()
+  const orders = await getOrders()
+  const products = await getProducts()
 
   const today = new Date().toISOString().split('T')[0]
   const todayOrders = orders.filter(o => o.createdAt?.startsWith(today))

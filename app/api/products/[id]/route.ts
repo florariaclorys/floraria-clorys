@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const { id } = params
   // Try by ID first, then by slug
-  const product = getProductById(id) ?? getProductBySlug(id)
+  const product = await getProductById(id) ?? await getProductBySlug(id)
   if (!product) {
     return NextResponse.json({ error: 'Produsul nu a fost găsit' }, { status: 404 })
   }
@@ -20,7 +20,7 @@ export async function PUT(
 ) {
   try {
     const data = await request.json()
-    const updated = updateProduct(params.id, data)
+    const updated = await updateProduct(params.id, data)
     if (!updated) {
       return NextResponse.json({ error: 'Produsul nu a fost găsit' }, { status: 404 })
     }
@@ -35,7 +35,7 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const success = deleteProduct(params.id)
+  const success = await deleteProduct(params.id)
   if (!success) {
     return NextResponse.json({ error: 'Produsul nu a fost găsit' }, { status: 404 })
   }

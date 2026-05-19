@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 import { cookies } from 'next/headers'
+import { supabase } from '@/lib/supabase'
 
 function isAdmin(): boolean {
   const cookieStore = cookies()
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Tip fișier invalid. Acceptăm: JPG, PNG, WebP' }, { status: 400 })
     }
 
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
       return NextResponse.json({ error: 'Fișierul este prea mare (max 5MB)' }, { status: 400 })
     }
@@ -34,15 +33,20 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    const ext = path.extname(file.name).toLowerCase() || '.jpg'
-    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}${ext}`
-    const uploadDir = path.join(process.cwd(), 'public', 'images', 'products')
+    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
+    const filename = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${ext}`
 
-    await mkdir(uploadDir, { recursive: true })
-    await writeFile(path.join(uploadDir, filename), buffer)
+    const { error } = await supabase.storage
+      .from('products')
+      .upload(filename, buffer, { contentType: file.type, upsert: false })
 
-    const imagePath = `/images/products/${filename}`
-    return NextResponse.json({ path: imagePath }, { status: 201 })
+    if (error) {
+      console.error('Storage error:', error)
+      return NextResponse.json({ error: 'Eroare la upload' }, { status: 500 })
+    }
+
+    const { data: urlData } = supabase.storage.from('products').getPublicUrl(filename)
+    return NextResponse.json({ path: urlData.publicUrl }, { status: 201 })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ error: 'Eroare la upload' }, { status: 500 })

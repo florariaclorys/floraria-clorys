@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const featured = searchParams.get('featured')
   const search = searchParams.get('search')
 
-  let products = getProducts()
+  let products = await getProducts()
 
   if (category) {
     products = products.filter(p => p.category === category)
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json() as Omit<Product, 'id' | 'createdAt'>
-    const product = createProduct(data)
+    const product = await createProduct(data)
     return NextResponse.json(product, { status: 201 })
   } catch (err) {
     console.error(err)

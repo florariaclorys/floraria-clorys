@@ -14,7 +14,7 @@ export async function GET() {
   if (!isAdmin()) {
     return NextResponse.json({ error: 'Neautorizat' }, { status: 401 })
   }
-  const orders = getOrders()
+  const orders = await getOrders()
   return NextResponse.json(orders)
 }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Data și ora livrării sunt obligatorii' }, { status: 400 })
     }
 
-    const order = createOrder({
+    const order = await createOrder({
       customer,
       items,
       subtotal,
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     // Use discount if present
     if (discountCode) {
       try {
-        useDiscount(discountCode)
+        await useDiscount(discountCode)
       } catch {
         // non-fatal
       }

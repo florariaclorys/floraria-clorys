@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const result = validateDiscount(code, orderValue)
+    const result = await validateDiscount(code, orderValue)
     return NextResponse.json(result)
   } catch (err) {
     console.error(err)

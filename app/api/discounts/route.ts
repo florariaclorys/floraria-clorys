@@ -12,7 +12,7 @@ export async function GET() {
   if (!isAdmin()) {
     return NextResponse.json({ error: 'Neautorizat' }, { status: 401 })
   }
-  return NextResponse.json(getDiscounts())
+  return NextResponse.json(await getDiscounts())
 }
 
 export async function POST(request: NextRequest) {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
   }
   try {
     const data = await request.json() as Omit<Discount, 'id' | 'usedCount'>
-    const discount = createDiscount(data)
+    const discount = await createDiscount(data)
     return NextResponse.json(discount, { status: 201 })
   } catch (err) {
     console.error(err)
@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest) {
   }
   try {
     const { id, ...data } = await request.json()
-    const updated = updateDiscount(id, data)
+    const updated = await updateDiscount(id, data)
     if (!updated) {
       return NextResponse.json({ error: 'Codul nu a fost găsit' }, { status: 404 })
     }
@@ -55,7 +55,7 @@ export async function DELETE(request: NextRequest) {
   if (!id) {
     return NextResponse.json({ error: 'ID lipsă' }, { status: 400 })
   }
-  const success = deleteDiscount(id)
+  const success = await deleteDiscount(id)
   if (!success) {
     return NextResponse.json({ error: 'Codul nu a fost găsit' }, { status: 404 })
   }

@@ -12,7 +12,7 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const order = getOrderById(params.id)
+  const order = await getOrderById(params.id)
   if (!order) {
     return NextResponse.json({ error: 'Comanda nu a fost găsită' }, { status: 404 })
   }
@@ -28,7 +28,7 @@ export async function PUT(
   }
   try {
     const { status } = await request.json() as { status: Order['status'] }
-    const updated = updateOrderStatus(params.id, status)
+    const updated = await updateOrderStatus(params.id, status)
     if (!updated) {
       return NextResponse.json({ error: 'Comanda nu a fost găsită' }, { status: 404 })
     }
