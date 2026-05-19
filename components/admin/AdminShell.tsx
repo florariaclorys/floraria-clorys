@@ -8,6 +8,7 @@ const NAV = [
   { href: '/admin/comenzi', icon: '📦', label: 'Comenzi' },
   { href: '/admin/produse', icon: '🌸', label: 'Produse' },
   { href: '/admin/discounturi', icon: '🏷️', label: 'Discounturi' },
+  { href: '/admin/setari', icon: '⚙️', label: 'Setari' },
 ]
 
 export default function AdminShell({ children, pendingCount = 0 }: { children: React.ReactNode; pendingCount?: number }) {
