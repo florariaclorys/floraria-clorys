@@ -67,6 +67,12 @@ export default function Header() {
             ))}
           </nav>
 
+          {/* Schedule */}
+          <div className={`hidden lg:flex flex-col items-end leading-tight mr-1 ${isHome && !isScrolled ? 'text-white/70' : 'text-textdark/50'}`}>
+            <span className="font-lato text-[10px] tracking-wide">L-V 09:00–19:00 · S 10:00–17:00</span>
+            <span className="font-lato text-[10px] tracking-wide">Duminică <span className={isHome && !isScrolled ? 'text-white/50' : 'text-red-400'}>Închis</span></span>
+          </div>
+
           {/* Cart + Mobile */}
           <div className="flex items-center gap-4">
             <Link href="/cos" className="relative group">
