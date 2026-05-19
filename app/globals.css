@@ -24,6 +24,18 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
 body {
   font-family: 'Lato', sans-serif;
   background-color: var(--background);
@@ -49,23 +61,11 @@ body {
 
 /* Petal animation */
 @keyframes petalFall {
-  0% {
-    transform: translateY(-10%) rotate(0deg) translateX(0px);
-    opacity: 1;
-  }
-  25% {
-    transform: translateY(25vh) rotate(180deg) translateX(30px);
-  }
-  50% {
-    transform: translateY(55vh) rotate(360deg) translateX(-20px);
-  }
-  75% {
-    transform: translateY(80vh) rotate(540deg) translateX(15px);
-  }
-  100% {
-    transform: translateY(110vh) rotate(720deg) translateX(0px);
-    opacity: 0;
-  }
+  0% { transform: translateY(-10%) rotate(0deg) translateX(0px); opacity: 1; }
+  25% { transform: translateY(25vh) rotate(180deg) translateX(30px); }
+  50% { transform: translateY(55vh) rotate(360deg) translateX(-20px); }
+  75% { transform: translateY(80vh) rotate(540deg) translateX(15px); }
+  100% { transform: translateY(110vh) rotate(720deg) translateX(0px); opacity: 0; }
 }
 
 @keyframes float {
@@ -74,14 +74,8 @@ body {
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes shimmer {
@@ -98,76 +92,27 @@ body {
   opacity: 0.7;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
+.animate-float { animation: float 6s ease-in-out infinite; }
+.fade-in-up { animation: fadeInUp 0.7s ease-out forwards; }
 
-.fade-in-up {
-  animation: fadeInUp 0.7s ease-out forwards;
-}
-
-/* Button styles */
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-secondary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
-    letter-spacing: 0.15em;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-white text-white font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-white hover:text-primary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
-    letter-spacing: 0.15em;
-  }
-
-  .btn-outline {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-primary text-primary font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0;
-    letter-spacing: 0.15em;
-  }
-
-  .card-hover {
-    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl;
-  }
-
-  .section-heading {
-    @apply font-cormorant text-4xl md:text-5xl text-primary font-light text-center mb-4;
-  }
-
-  .section-subheading {
-    @apply font-lato text-accent text-sm tracking-widest uppercase text-center mb-2;
-  }
-
-  .section-divider {
-    @apply flex items-center justify-center gap-4 mb-12;
-  }
-
-  .input-field {
-    @apply w-full px-4 py-3 border border-light bg-white text-textdark font-lato text-sm focus:outline-none focus:border-accent transition-colors duration-200;
-  }
-
-  .label-field {
-    @apply block text-textdark font-lato text-sm font-semibold mb-1.5;
-  }
+  .btn-primary { @apply inline-flex items-center justify-center px-8 py-3 bg-primary text-white font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-secondary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0; letter-spacing: 0.15em; }
+  .btn-secondary { @apply inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-white text-white font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-white hover:text-primary hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0; letter-spacing: 0.15em; }
+  .btn-outline { @apply inline-flex items-center justify-center px-8 py-3 bg-transparent border-2 border-primary text-primary font-lato font-semibold text-sm tracking-widest uppercase rounded-none transition-all duration-300 hover:bg-primary hover:text-white hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0; letter-spacing: 0.15em; }
+  .card-hover { @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-xl; }
+  .section-heading { @apply font-cormorant text-4xl md:text-5xl text-primary font-light text-center mb-4; }
+  .section-subheading { @apply font-lato text-accent text-sm tracking-widest uppercase text-center mb-2; }
+  .section-divider { @apply flex items-center justify-center gap-4 mb-12; }
+  .input-field { @apply w-full px-4 py-3 border border-light bg-white text-textdark font-lato text-sm focus:outline-none focus:border-accent transition-colors duration-200; }
+  .label-field { @apply block text-textdark font-lato text-sm font-semibold mb-1.5; }
 }
 
-/* Product image placeholder gradient */
 .product-img-placeholder {
   background: linear-gradient(135deg, var(--light) 0%, var(--accent) 50%, var(--light) 100%);
   background-size: 200% 200%;
   animation: shimmer 3s linear infinite;
 }
 
-/* Selection color */
-::selection {
-  background-color: var(--light);
-  color: var(--primary);
-}
-
-/* Focus ring */
-*:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* Transition defaults */
-a, button {
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s, transform 0.2s;
-}
+::selection { background-color: var(--light); color: var(--primary); }
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s, transform 0.2s; }
