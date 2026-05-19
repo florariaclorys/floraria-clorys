@@ -123,8 +123,12 @@ export default function AdminProductsPage() {
                   <tr key={p.id} className={`border-b border-light ${i % 2 === 0 ? 'bg-white' : 'bg-background'}`}>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded product-img-placeholder flex items-center justify-center flex-shrink-0">
-                          <span className="text-lg">{categoryEmoji[p.category] || '🌸'}</span>
+                        <div className="w-10 h-10 rounded overflow-hidden bg-[#f9eef1] flex items-center justify-center flex-shrink-0">
+                          {p.images?.[0] ? (
+                            <img src={p.images[0]} alt={p.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <span className="text-lg">{categoryEmoji[p.category] || '🌸'}</span>
+                          )}
                         </div>
                         <div>
                           <p className="font-lato text-sm font-semibold text-textdark">{p.name}</p>
