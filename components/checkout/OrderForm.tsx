@@ -269,26 +269,13 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
           <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Metodă de plată</h2>
           <div className="space-y-3">
             {([
-              { value: 'ramburs', label: 'Ramburs la livrare', desc: 'Plătești cash sau cu cardul la livrare' },
-              { value: 'transfer', label: 'Transfer bancar', desc: 'Vei primi un email cu datele de transfer' },
-            ] as const).map(opt => (
-              <label key={opt.value} className={`flex items-start gap-4 p-4 border-2 rounded-lg cursor-pointer transition-colors ${
-                form.paymentMethod === opt.value ? 'border-primary bg-light/40' : 'border-light hover:border-accent'
-              }`}>
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value={opt.value}
-                  checked={form.paymentMethod === opt.value}
-                  onChange={set('paymentMethod')}
-                  className="mt-0.5 accent-primary"
-                />
-                <div>
-                  <p className="font-lato text-sm font-bold text-textdark">{opt.label}</p>
-                  <p className="font-lato text-xs text-textdark/60 mt-0.5">{opt.desc}</p>
-                </div>
-              </label>
-            ))}
+              <div className="flex items-start gap-4 p-4 border-2 border-primary bg-light/40 rounded-lg">
+              <span className="text-2xl mt-0.5">💵</span>
+              <div>
+                <p className="font-lato text-sm font-bold text-textdark">Ramburs la livrare</p>
+                <p className="font-lato text-xs text-textdark/60 mt-0.5">Plătești cash la livrare</p>
+              </div>
+            </div>
           </div>
 
           {/* Summary */}
