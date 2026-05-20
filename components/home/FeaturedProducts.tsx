@@ -65,12 +65,26 @@ function ProductCard({ product }: { product: Product }) {
 
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch('/api/products?featured=true')
       .then(r => r.json())
-      .then(setProducts)
-      .catch(() => {})
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts(data)
+          setLoading(false)
+        } else {
+          // Fallback: show any products if none are marked featured
+          return fetch('/api/products')
+            .then(r => r.json())
+            .then(all => {
+              setProducts(Array.isArray(all) ? all.slice(0, 8) : [])
+              setLoading(false)
+            })
+        }
+      })
+      .catch(() => setLoading(false))
   }, [])
 
   return (
@@ -84,7 +98,7 @@ export default function FeaturedProducts() {
           <div className="w-16 h-px bg-accent" />
         </div>
 
-        {products.length === 0 ? (
+        {loading ? (
           <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
             {[1, 2, 3, 4].map(i => (
               <div key={i} className="flex-shrink-0 w-64 animate-pulse">
@@ -97,6 +111,11 @@ export default function FeaturedProducts() {
                 </div>
               </div>
             ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-16">
+            <p className="font-cormorant text-2xl text-primary font-light mb-2">Produsele se adaugă în curând</p>
+            <p className="font-lato text-sm text-textdark/50">Revin-o mai târziu sau vizitează catalogul complet.</p>
           </div>
         ) : (
           <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory">
