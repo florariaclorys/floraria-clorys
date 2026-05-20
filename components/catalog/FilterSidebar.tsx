@@ -51,72 +51,70 @@ export default function FilterSidebar() {
   }, [category, sort, inStockOnly])
 
   return (
-    <aside className="w-full lg:w-72 flex-shrink-0">
+    <aside className="w-full lg:w-52 flex-shrink-0">
       <div
-        className="sticky top-24 rounded-2xl overflow-hidden"
+        className="sticky top-24 rounded-xl overflow-hidden"
         style={{
-          background: 'linear-gradient(160deg, #2A0A12 0%, #1a0509 100%)',
-          boxShadow: '0 8px 32px rgba(42,10,18,0.25), 0 2px 8px rgba(0,0,0,0.15)',
-          border: '1px solid rgba(201,169,110,0.15)',
+          background: 'rgba(26,5,9,0.72)',
+          backdropFilter: 'blur(12px)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.18)',
+          border: '1px solid rgba(201,169,110,0.1)',
         }}
       >
         {/* Header */}
-        <div className="px-6 pt-6 pb-4 border-b border-white/8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">🔍</span>
-            <h3 className="font-cormorant text-xl font-semibold text-white tracking-wide">Filtre</h3>
+        <div className="px-4 pt-4 pb-3 border-b border-white/5 flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="text-base">🔍</span>
+            <h3 className="font-cormorant text-lg font-semibold text-white tracking-wide">Filtre</h3>
           </div>
           <button
             onClick={resetFilters}
-            className="font-lato text-[10px] tracking-widest uppercase text-white/40 hover:text-gold transition-colors"
-            style={{ color: undefined }}
+            className="font-lato text-[9px] tracking-widest uppercase text-white/35 hover:text-white/70 transition-colors"
           >
             Resetează
           </button>
         </div>
 
-        <div className="px-5 py-5 space-y-7">
+        <div className="px-3 py-4 space-y-5">
 
           {/* Categories */}
           <div>
-            <p className="font-lato text-[10px] tracking-[0.25em] uppercase text-white/35 mb-3">Categorie</p>
-            <div className="flex flex-col gap-2.5">
+            <p className="font-lato text-[9px] tracking-[0.25em] uppercase text-white/30 mb-2">Categorie</p>
+            <div className="flex flex-col gap-1.5">
               {CATEGORIES.map(cat => {
                 const isActive = category === cat.value
                 return (
                   <button
                     key={cat.value}
                     onClick={() => setCategory(cat.value)}
-                    className="flex items-center gap-3 px-4 py-3 w-full text-left font-cormorant font-semibold text-base tracking-wide select-none"
+                    className="flex items-center gap-2.5 px-3 py-2 w-full text-left font-cormorant font-semibold text-sm tracking-wide select-none"
                     style={{
-                      background: isActive ? cat.bg : 'rgba(255,255,255,0.04)',
-                      color: isActive ? cat.text : 'rgba(255,255,255,0.6)',
-                      boxShadow: isActive
-                        ? `3px 3px 0px ${cat.shadow}`
-                        : '2px 2px 0px rgba(0,0,0,0.3)',
-                      borderRadius: 6,
-                      border: isActive ? 'none' : '1px solid rgba(255,255,255,0.06)',
-                      transform: isActive ? 'translate(2px,2px)' : 'translate(0,0)',
+                      background: isActive ? `${cat.bg}99` : 'rgba(255,255,255,0.03)',
+                      color: isActive ? cat.text : 'rgba(255,255,255,0.5)',
+                      boxShadow: isActive ? `2px 2px 0px ${cat.shadow}88` : '1px 1px 0px rgba(0,0,0,0.2)',
+                      borderRadius: 5,
+                      border: isActive ? 'none' : '1px solid rgba(255,255,255,0.05)',
+                      transform: isActive ? 'translate(1px,1px)' : 'translate(0,0)',
                       transition: 'all 0.12s ease',
                     }}
                     onMouseEnter={e => {
                       if (!isActive) {
-                        e.currentTarget.style.background = cat.bg
+                        e.currentTarget.style.background = `${cat.bg}55`
                         e.currentTarget.style.color = cat.text
-                        e.currentTarget.style.boxShadow = `3px 3px 0px ${cat.shadow}`
+                        e.currentTarget.style.boxShadow = `2px 2px 0px ${cat.shadow}66`
                         e.currentTarget.style.border = 'none'
                       }
                     }}
                     onMouseLeave={e => {
                       if (!isActive) {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-                        e.currentTarget.style.color = 'rgba(255,255,255,0.6)'
-                        e.currentTarget.style.boxShadow = '2px 2px 0px rgba(0,0,0,0.3)'
-                        e.currentTarget.style.border = '1px solid rgba(255,255,255,0.06)'
+                        e.currentTarget.style.background = 'rgba(255,255,255,0.03)'
+                        e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+                        e.currentTarget.style.boxShadow = '1px 1px 0px rgba(0,0,0,0.2)'
+                        e.currentTarget.style.border = '1px solid rgba(255,255,255,0.05)'
                       }
                     }}
                   >
-                    <span className="text-lg leading-none">{cat.emoji}</span>
+                    <span className="text-base leading-none">{cat.emoji}</span>
                     <span>{cat.label}</span>
                   </button>
                 )
@@ -125,8 +123,8 @@ export default function FilterSidebar() {
           </div>
 
           {/* Price range */}
-          <div className="border-t pt-6" style={{ borderColor: 'rgba(201,169,110,0.12)' }}>
-            <p className="font-lato text-[10px] tracking-[0.25em] uppercase text-white/35 mb-3">Preț (RON)</p>
+          <div className="border-t pt-4" style={{ borderColor: 'rgba(201,169,110,0.1)' }}>
+            <p className="font-lato text-[9px] tracking-[0.25em] uppercase text-white/30 mb-2">Preț (RON)</p>
             <div className="flex items-center gap-2">
               <input
                 type="number"
@@ -159,8 +157,8 @@ export default function FilterSidebar() {
           </div>
 
           {/* Sort */}
-          <div className="border-t pt-6" style={{ borderColor: 'rgba(201,169,110,0.12)' }}>
-            <p className="font-lato text-[10px] tracking-[0.25em] uppercase text-white/35 mb-3">Sortare</p>
+          <div className="border-t pt-4" style={{ borderColor: 'rgba(201,169,110,0.1)' }}>
+            <p className="font-lato text-[9px] tracking-[0.25em] uppercase text-white/30 mb-2">Sortare</p>
             <select
               value={sort}
               onChange={e => setSort(e.target.value)}
@@ -180,7 +178,7 @@ export default function FilterSidebar() {
           </div>
 
           {/* In stock toggle */}
-          <div className="border-t pt-6" style={{ borderColor: 'rgba(201,169,110,0.12)' }}>
+          <div className="border-t pt-4" style={{ borderColor: 'rgba(201,169,110,0.1)' }}>
             <button
               onClick={() => setInStockOnly(!inStockOnly)}
               className="flex items-center justify-between w-full"
