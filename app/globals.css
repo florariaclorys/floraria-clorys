@@ -116,3 +116,14 @@ body {
 ::selection { background-color: var(--light); color: var(--primary); }
 *:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, opacity 0.2s, transform 0.2s; }
+
+/* 3D Category Buttons */
+.category-btn-link { display: block; text-decoration: none; }
+.category-btn {
+  box-shadow: var(--cat-shadow, 6px 6px 0px #2A0A12);
+  transition: box-shadow 0.12s ease, transform 0.12s ease;
+}
+.category-btn:hover {
+  box-shadow: var(--cat-shadow-hover, 2px 2px 0px #2A0A12) !important;
+  transform: translate(4px, 4px);
+}
