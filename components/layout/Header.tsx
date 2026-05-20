@@ -43,11 +43,11 @@ export default function Header() {
 
   const headerBg = isHome && !isScrolled
     ? 'bg-transparent'
-    : 'bg-white/95 backdrop-blur-sm shadow-sm border-b border-light'
+    : 'bg-[#2A0A12]/97 backdrop-blur-sm shadow-lg border-b border-white/10'
 
-  const textColor = isHome && !isScrolled ? 'text-white' : 'text-textdark'
-  const logoColor = isHome && !isScrolled ? 'text-white' : 'text-primary'
-  const logoSubColor = isHome && !isScrolled ? 'text-gold' : 'text-gold'
+  const textColor = 'text-white'
+  const logoColor = isHome && !isScrolled ? 'text-white' : 'text-gold'
+  const logoSubColor = 'text-gold'
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
@@ -105,10 +105,10 @@ export default function Header() {
             </Link>
 
             {/* Schedule */}
-            <div className={`hidden lg:flex flex-col items-start leading-tight ${isHome && !isScrolled ? 'text-white/70' : 'text-textdark/50'}`}>
+            <div className="hidden lg:flex flex-col items-start leading-tight text-white/60">
               <span className="font-lato text-[10px] tracking-wide">L-V {hours.weekdays}</span>
               <span className="font-lato text-[10px] tracking-wide">S {hours.saturday}</span>
-              <span className={`font-lato text-[10px] tracking-wide ${isHome && !isScrolled ? 'text-white/50' : 'text-red-400'}`}>D {hours.sunday}</span>
+              <span className="font-lato text-[10px] tracking-wide text-white/40">D {hours.sunday}</span>
             </div>
 
             <button
@@ -128,14 +128,14 @@ export default function Header() {
           mobileOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
-        <nav className="bg-white border-t border-light px-6 py-4 flex flex-col gap-4">
+        <nav className="bg-[#2A0A12] border-t border-white/10 px-6 py-4 flex flex-col gap-4">
           {navLinks.map(link => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setMobileOpen(false)}
               className={`font-lato text-sm tracking-widest uppercase font-semibold transition-colors hover:text-accent ${
-                pathname === link.href ? 'text-accent' : 'text-textdark'
+                pathname === link.href ? 'text-accent' : 'text-white'
               }`}
             >
               {link.label}
@@ -144,7 +144,7 @@ export default function Header() {
           <Link
             href="/cos"
             onClick={() => setMobileOpen(false)}
-            className="font-lato text-sm tracking-widest uppercase font-semibold text-textdark hover:text-accent transition-colors flex items-center gap-2"
+            className="font-lato text-sm tracking-widest uppercase font-semibold text-white hover:text-accent transition-colors flex items-center gap-2"
           >
             <ShoppingBag size={16} />
             Coș ({cartCount})
