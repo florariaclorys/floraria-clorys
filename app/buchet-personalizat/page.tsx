@@ -238,9 +238,17 @@ export default function BuchetPersonalizat() {
           <h1 style={{ fontFamily:'Cormorant Garamond,serif', fontSize:'clamp(38px,6vw,68px)', fontWeight:300, color:'#fff', lineHeight:1.1, marginBottom:14 }}>
             Buchet Personalizat
           </h1>
-          <p style={{ fontFamily:'Lato,sans-serif', fontSize:14, color:'rgba(255,255,255,.45)', maxWidth:400, margin:'0 auto' }}>
-            Alege florile tale, folia și panglica. Livrăm în 1–3 ore în Negrești-Oaș.
+          <p style={{ fontFamily:'Cormorant Garamond,serif', fontStyle:'italic', fontSize:'clamp(15px,1.6vw,19px)', color:'rgba(255,255,255,.72)', maxWidth:520, margin:'0 auto', lineHeight:1.7 }}>
+            Alege florile tale, folia și panglica. Livrăm în 1–3 ore în Țara Oașului.
           </p>
+          <div style={{ marginTop:16, display:'flex', flexWrap:'wrap', justifyContent:'center', gap:10 }}>
+            <span style={{ fontFamily:'Lato,sans-serif', fontSize:12, letterSpacing:'0.12em', background:'rgba(212,168,67,.15)', border:'1px solid rgba(212,168,67,.35)', color:'#d4a843', borderRadius:20, padding:'5px 14px' }}>
+              🚚 Livrare gratuită în Negrești-Oaș
+            </span>
+            <span style={{ fontFamily:'Lato,sans-serif', fontSize:12, letterSpacing:'0.12em', background:'rgba(212,168,67,.15)', border:'1px solid rgba(212,168,67,.35)', color:'#d4a843', borderRadius:20, padding:'5px 14px' }}>
+              🌿 Livrare gratuită în Țara Oașului la buchete peste 300 lei
+            </span>
+          </div>
         </div>
 
         <div style={{ maxWidth:1280, margin:'0 auto', padding:'40px 20px', display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(340px,1fr))', gap:32 }}>
