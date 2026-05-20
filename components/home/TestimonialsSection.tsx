@@ -95,10 +95,10 @@ export default function TestimonialsSection() {
         setForm({ name: '', rating: 5, text: '' })
         loadReviews()
       } else {
-        toast.error('Ceva nu a mers. Încercă din nou.')
+        toast.error('Ceva nu a mers. Încearcă din nou.')
       }
     } catch {
-      toast.error('Eroare de conexiune. Încercă din nou.')
+      toast.error('Eroare de conexiune. Încearcă din nou.')
     } finally {
       setSending(false)
     }
@@ -117,6 +117,7 @@ export default function TestimonialsSection() {
           <div className="w-16 h-px bg-accent" />
         </div>
 
+        {/* Reviews grid */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
             {[1, 2, 3].map(i => (
@@ -160,6 +161,7 @@ export default function TestimonialsSection() {
           </div>
         )}
 
+        {/* Rating summary */}
         <div className="text-center mt-12 p-8 bg-light rounded-lg">
           <p className="font-cormorant text-3xl text-primary mb-2">Satisfacția ta este prioritatea noastră</p>
           <p className="font-lato text-sm text-textdark/60 mb-6">
@@ -173,6 +175,7 @@ export default function TestimonialsSection() {
           </div>
         </div>
 
+        {/* Leave a review form */}
         <div className="mt-16 max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <p className="section-subheading">Experiența ta</p>
