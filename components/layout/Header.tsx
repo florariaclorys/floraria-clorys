@@ -12,7 +12,7 @@ interface BusinessHours {
   sunday: string
 }
 
-const DEFAULT_HOURS: BusinessHours = { weekdays: '09:00–19:00', saturday: '10:00–17:00', sunday: 'Inchis' }
+const DEFAULT_HOURS: BusinessHours = { weekdays: '09:00–19:00', saturday: '10:00–17:00', sunday: 'Închis' }
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -36,7 +36,7 @@ export default function Header() {
   }, [])
 
   const navLinks = [
-    { href: '/', label: 'Acasa' },
+    { href: '/', label: 'Acasă' },
     { href: '/catalog', label: 'Catalog' },
     { href: '/contact', label: 'Contact' },
   ]
@@ -56,6 +56,7 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
+            {/* Teddy bears image */}
             <img src="/images/ursulet.png" alt="ursulet" className="h-14 w-auto object-contain flex-shrink-0 drop-shadow-sm" />
             <div className="flex flex-col items-start">
               <span className={`font-lato text-xs tracking-[0.25em] uppercase font-light transition-colors ${logoSubColor}`}>
@@ -146,7 +147,7 @@ export default function Header() {
             className="font-lato text-sm tracking-widest uppercase font-semibold text-textdark hover:text-accent transition-colors flex items-center gap-2"
           >
             <ShoppingBag size={16} />
-            Cos ({cartCount})
+            Coș ({cartCount})
           </Link>
         </nav>
       </div>
