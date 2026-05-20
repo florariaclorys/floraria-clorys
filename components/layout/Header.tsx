@@ -38,6 +38,7 @@ export default function Header() {
   const navLinks = [
     { href: '/', label: 'Acasă' },
     { href: '/catalog', label: 'Catalog' },
+    { href: '/buchet-personalizat', label: 'Buchet Personalizat' },
     { href: '/contact', label: 'Contact' },
   ]
 
