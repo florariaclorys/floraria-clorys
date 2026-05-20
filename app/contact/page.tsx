@@ -44,6 +44,7 @@ export default function ContactPage() {
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
         <div className="text-center mb-16">
           <p className="section-subheading">Suntem alături de tine</p>
           <h1 className="section-heading">Contactează-ne</h1>
@@ -58,24 +59,51 @@ export default function ContactPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Form */}
           <div className="bg-white border border-light p-8">
             <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Trimite un mesaj</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="label-field">Numele tău *</label>
-                <input className="input-field" value={form.name} onChange={set('name')} placeholder="Ion Popescu" required />
+                <input
+                  className="input-field"
+                  value={form.name}
+                  onChange={set('name')}
+                  placeholder="Ion Popescu"
+                  required
+                />
               </div>
               <div>
                 <label className="label-field">Email *</label>
-                <input className="input-field" type="email" value={form.email} onChange={set('email')} placeholder="email@exemplu.ro" required />
+                <input
+                  className="input-field"
+                  type="email"
+                  value={form.email}
+                  onChange={set('email')}
+                  placeholder="email@exemplu.ro"
+                  required
+                />
               </div>
               <div>
                 <label className="label-field">Telefon</label>
-                <input className="input-field" type="tel" value={form.phone} onChange={set('phone')} placeholder="07XX XXX XXX" />
+                <input
+                  className="input-field"
+                  type="tel"
+                  value={form.phone}
+                  onChange={set('phone')}
+                  placeholder="07XX XXX XXX"
+                />
               </div>
               <div>
                 <label className="label-field">Mesaj *</label>
-                <textarea className="input-field resize-none" rows={6} value={form.message} onChange={set('message')} placeholder="Spune-ne cum te putem ajuta..." required />
+                <textarea
+                  className="input-field resize-none"
+                  rows={6}
+                  value={form.message}
+                  onChange={set('message')}
+                  placeholder="Spune-ne cum te putem ajuta..."
+                  required
+                />
               </div>
               <button type="submit" disabled={sending} className="btn-primary w-full py-4">
                 {sending ? 'Se trimite...' : 'Trimite Mesajul'}
@@ -83,7 +111,9 @@ export default function ContactPage() {
             </form>
           </div>
 
+          {/* Info */}
           <div className="space-y-6">
+            {/* Contact card */}
             <div className="bg-primary p-8 text-white">
               <h2 className="font-cormorant text-2xl font-light mb-6">Informații de contact</h2>
               <div className="space-y-5">
@@ -110,6 +140,7 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* Hours */}
             <div className="bg-white border border-light p-6">
               <h3 className="font-cormorant text-xl font-semibold text-textdark mb-4">Program de lucru</h3>
               <div className="space-y-2">
@@ -126,6 +157,7 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* Map — clickable GPS link */}
             <a
               href={GPS_URL}
               target="_blank"
@@ -142,6 +174,7 @@ export default function ContactPage() {
               </div>
             </a>
 
+            {/* WhatsApp CTA */}
             <a
               href="https://wa.me/40770930786?text=Bună ziua! Aș dori mai multe informații."
               target="_blank"
