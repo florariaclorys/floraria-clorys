@@ -268,8 +268,7 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
         <div className="space-y-4">
           <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Metodă de plată</h2>
           <div className="space-y-3">
-            {([
-              <div className="flex items-start gap-4 p-4 border-2 border-primary bg-light/40 rounded-lg">
+            <div className="flex items-start gap-4 p-4 border-2 border-primary bg-light/40 rounded-lg">
               <span className="text-2xl mt-0.5">💵</span>
               <div>
                 <p className="font-lato text-sm font-bold text-textdark">Ramburs la livrare</p>
