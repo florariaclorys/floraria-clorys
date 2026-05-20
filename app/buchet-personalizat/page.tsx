@@ -259,9 +259,19 @@ export default function BuchetPersonalizat() {
                       >
                         −
                       </button>
-                      <span className="w-6 text-center font-lato font-bold text-sm text-textdark">
-                        {qty[f.id]}
-                      </span>
+                      <input
+                        type="number"
+                        min={0}
+                        value={qty[f.id]}
+                        onChange={e => {
+                          const val = Math.max(0, parseInt(e.target.value) || 0)
+                          if (val !== qty[f.id]) {
+                            spawnSparks(f.id, val > qty[f.id])
+                            setQty(prev => ({ ...prev, [f.id]: val }))
+                          }
+                        }}
+                        className="w-12 text-center font-lato font-bold text-sm text-textdark border border-light rounded-md py-0.5 focus:outline-none focus:border-primary"
+                      />
                       <button
                         onClick={() => changeQty(f.id, 1)}
                         className="w-7 h-7 rounded-full border border-light flex items-center justify-center text-textdark hover:bg-primary hover:text-white hover:border-primary transition-colors font-bold text-sm"
