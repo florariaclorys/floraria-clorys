@@ -13,7 +13,7 @@ function ProductCard({ product }: { product: Product }) {
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
     addToCart(product, 1)
-    toast.success(`${product.name} adaugat in cos! 🌸`, {
+    toast.success(`${product.name} adăugat în coș! 🌸`, {
       style: { background: '#FDF8F9', color: '#2A0A12', border: '1px solid #F5E6EA' },
     })
   }
@@ -55,7 +55,7 @@ function ProductCard({ product }: { product: Product }) {
             className="flex items-center gap-1.5 bg-primary text-white px-3 py-2 text-xs font-lato font-semibold tracking-wider uppercase hover:bg-secondary transition-colors"
           >
             <ShoppingBag size={14} />
-            Adauga
+            Adaugă
           </button>
         </div>
       </div>
@@ -76,8 +76,8 @@ export default function FeaturedProducts() {
   return (
     <section className="py-24 bg-light/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="section-subheading">Selectie</p>
-        <h2 className="section-heading">Colectia Noastra</h2>
+        <p className="section-subheading">Selecție</p>
+        <h2 className="section-heading">Colecția Noastră</h2>
         <div className="section-divider">
           <div className="w-16 h-px bg-accent" />
           <span className="text-accent text-lg">✿</span>
