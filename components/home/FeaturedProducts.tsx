@@ -26,43 +26,61 @@ function ProductCard({ product }: { product: Product }) {
     })
   }
 
+  const emoji = product.category === 'buchete' ? '💐'
+    : product.category === 'cutii' ? '🎁'
+    : product.category === 'aranjamente' ? '🌿'
+    : product.category === 'plante' ? '🌱' : '✨'
+
   return (
-    <Link href={`/produs/${product.slug}`} className="group flex-shrink-0 w-64">
-      <div className="relative overflow-hidden rounded-t-lg" style={{ aspectRatio: '4/5' }}>
-        <div
-          className="w-full h-full transition-transform duration-500 group-hover:scale-105 product-img-placeholder flex items-center justify-center"
-          style={{ minHeight: 240 }}
-        >
-          {product.images?.[0] ? (
-            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-6xl filter drop-shadow">
-              {product.category === 'buchete' ? '💐' :
-               product.category === 'cutii' ? '🎁' :
-               product.category === 'aranjamente' ? '🌿' :
-               product.category === 'plante' ? '🌱' : '✨'}
-            </span>
-          )}
-        </div>
+    <Link href={`/produs/${product.slug}`} className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      {/* Image */}
+      <div className="relative overflow-hidden bg-[#f9eef1]" style={{ aspectRatio: '3/4' }}>
+        {product.images?.[0] ? (
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-7xl filter drop-shadow">{emoji}</span>
+          </div>
+        )}
         {product.isNew && (
-          <span className="absolute top-3 left-3 bg-green-600 text-white font-lato text-xs font-bold px-2 py-0.5 rounded-sm tracking-widest uppercase">
+          <span className="absolute top-3 left-3 bg-green-600 text-white font-lato text-[10px] font-bold px-2.5 py-1 rounded-sm tracking-widest uppercase">
             Nou
           </span>
         )}
-      </div>
-      <div className="bg-white border border-light border-t-0 rounded-b-lg p-4">
-        <p className="font-lato text-xs text-accent tracking-widest uppercase mb-1">{product.category}</p>
-        <h3 className="font-cormorant text-lg text-textdark font-semibold leading-tight mb-2 group-hover:text-primary transition-colors">
-          {product.name}
-        </h3>
-        <p className="font-lato text-xs text-textdark/60 mb-3 line-clamp-2">{product.shortDescription}</p>
-        <div className="flex items-center justify-between">
-          <span className="font-cormorant text-2xl font-bold text-primary">{product.price} <span className="text-sm font-lato">RON</span></span>
+        {/* Quick-add overlay on hover */}
+        <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
           <button
             onClick={handleAdd}
-            className="flex items-center gap-1.5 bg-primary text-white px-3 py-2 text-xs font-lato font-semibold tracking-wider uppercase hover:bg-secondary transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-primary/95 backdrop-blur-sm text-white py-3 font-lato text-xs font-semibold tracking-widest uppercase hover:bg-secondary transition-colors"
           >
             <ShoppingBag size={14} />
+            Adaugă în coș
+          </button>
+        </div>
+      </div>
+
+      {/* Info */}
+      <div className="p-5 flex flex-col flex-1">
+        <p className="font-lato text-[10px] text-accent tracking-[0.2em] uppercase mb-2">{product.category}</p>
+        <h3 className="font-cormorant text-xl text-textdark font-semibold leading-snug mb-2 group-hover:text-primary transition-colors">
+          {product.name}
+        </h3>
+        <p className="font-lato text-xs text-textdark/55 leading-relaxed mb-4 line-clamp-2 flex-1">
+          {product.shortDescription}
+        </p>
+        <div className="flex items-center justify-between pt-3 border-t border-light">
+          <span className="font-cormorant text-2xl font-bold text-primary">
+            {product.price} <span className="text-sm font-lato font-normal">RON</span>
+          </span>
+          <button
+            onClick={handleAdd}
+            className="flex items-center gap-1.5 bg-primary text-white px-4 py-2 text-[11px] font-lato font-semibold tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors"
+          >
+            <ShoppingBag size={13} />
             Adaugă
           </button>
         </div>
@@ -162,14 +180,15 @@ export default function FeaturedProducts() {
         )}
 
         {loading ? (
-          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="flex-shrink-0 w-64 animate-pulse">
-                <div className="bg-light rounded-t-lg" style={{ aspectRatio: '4/5', minHeight: 240 }} />
-                <div className="bg-white border border-light border-t-0 rounded-b-lg p-4 space-y-2">
-                  <div className="h-3 bg-light rounded w-16" />
-                  <div className="h-5 bg-light rounded w-40" />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                <div className="bg-light" style={{ aspectRatio: '3/4' }} />
+                <div className="p-5 space-y-3">
+                  <div className="h-2.5 bg-light rounded w-16" />
+                  <div className="h-5 bg-light rounded w-3/4" />
                   <div className="h-3 bg-light rounded w-full" />
+                  <div className="h-3 bg-light rounded w-2/3" />
                   <div className="h-8 bg-light rounded w-full mt-2" />
                 </div>
               </div>
@@ -183,11 +202,9 @@ export default function FeaturedProducts() {
             <p className="font-lato text-sm text-textdark/50">Revin-o mai târziu sau vizitează catalogul complet.</p>
           </div>
         ) : (
-          <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map(p => (
-              <div key={p.id} className="snap-start">
-                <ProductCard product={p} />
-              </div>
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
         )}
