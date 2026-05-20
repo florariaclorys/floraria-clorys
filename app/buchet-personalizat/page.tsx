@@ -401,6 +401,21 @@ export default function BuchetPersonalizat() {
               </div>
             </div>
 
+            {/* Availability note */}
+            <p style={{
+              fontFamily: 'Cormorant Garamond, Cormorant, serif',
+              fontStyle: 'italic',
+              fontSize: 13.5,
+              lineHeight: 1.65,
+              color: C.text2,
+              textAlign: 'center',
+              padding: '0 8px',
+            }}>
+              Pentru flori precum Garofiță, Gherberă, Mini Trandafir, Lisianthus, Astromelia,
+              Frunză de Palmier, Bujor și Floarea Miresei — vă rugăm să ne contactați pentru
+              a verifica disponibilitatea în magazin. Vă mulțumim!
+            </p>
+
             {/* Form */}
             <form onSubmit={handleSubmit} style={{ background:'rgba(45,18,25,.9)', border:`1px solid ${C.border}`, borderRadius:14, padding:20, display:'flex', flexDirection:'column', gap:12 }}>
               <p style={{ fontFamily:'Playfair Display,serif', fontSize:17, color: C.gold, marginBottom:4 }}>📦 Date Livrare</p>
