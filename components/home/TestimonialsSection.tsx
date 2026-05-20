@@ -165,7 +165,7 @@ export default function TestimonialsSection() {
         <div className="text-center mt-12 p-8 bg-light rounded-lg">
           <p className="font-cormorant text-3xl text-primary mb-2">Satisfacția ta este prioritatea noastră</p>
           <p className="font-lato text-sm text-textdark/60 mb-6">
-            Peste 500 de clienți fericiți în ultimul an. Alătură-te comunității Clory&apos;s!
+            Peste 200 de clienți fericiți în ultimul an. Alătură-te comunității Clory&apos;s!
           </p>
           <div className="flex items-center justify-center gap-1">
             {[1, 2, 3, 4, 5].map(s => (
