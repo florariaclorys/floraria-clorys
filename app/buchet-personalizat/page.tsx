@@ -405,9 +405,9 @@ export default function BuchetPersonalizat() {
             <p style={{
               fontFamily: 'Cormorant Garamond, Cormorant, serif',
               fontStyle: 'italic',
-              fontSize: 13.5,
+              fontSize: 15.5,
               lineHeight: 1.65,
-              color: C.text2,
+              color: C.text,
               textAlign: 'center',
               padding: '0 8px',
             }}>
