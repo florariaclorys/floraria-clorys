@@ -38,7 +38,7 @@ export default function Header() {
   const navLinks = [
     { href: '/', label: 'Acasă' },
     { href: '/catalog', label: 'Catalog' },
-    { href: '/buchet-personalizat', label: 'Buchet Personalizat' },
+    { href: '/buchet-personalizat', label: 'Buchet Personalizat', gold: true },
     { href: '/contact', label: 'Contact' },
   ]
 
@@ -76,7 +76,9 @@ export default function Header() {
                 key={link.href}
                 href={link.href}
                 className={`font-lato text-xs tracking-[0.2em] uppercase font-semibold transition-colors hover:text-accent ${
-                  pathname === link.href ? 'text-accent' : textColor
+                  link.gold
+                    ? 'text-gold hover:text-accent'
+                    : pathname === link.href ? 'text-accent' : textColor
                 }`}
               >
                 {link.label}
