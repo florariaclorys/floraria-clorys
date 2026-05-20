@@ -83,6 +83,11 @@ export default function ProductPage() {
           <span className="text-textdark">{product.name}</span>
         </nav>
 
+        {/* Disclaimer */}
+        <p className="font-lato text-xs italic text-textdark/45 mb-6 leading-relaxed">
+          Nuanțele florilor pot diferi în funcție de stocul disponibil. Modelul florilor se pot înlocui cu flori asemănătoare în funcție de stoc.
+        </p>
+
         {/* Product detail */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
           {/* Image */}
