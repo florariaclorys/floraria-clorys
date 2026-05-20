@@ -7,6 +7,14 @@ import toast from 'react-hot-toast'
 import { Product } from '@/types'
 import { useCart } from '@/context/CartContext'
 
+const CATEGORIES = [
+  { slug: 'buchete',     label: 'Buchete',          emoji: '💐', bg: '#6B1A2E', text: '#C9A96E', shadow: '#2A0A12' },
+  { slug: 'aranjamente', label: 'Aranjamente',       emoji: '🌿', bg: '#1B3A2F', text: '#C9A96E', shadow: '#0D1F19' },
+  { slug: 'cutii',       label: 'Cutii cu Flori',    emoji: '🎁', bg: '#8B2340', text: '#F5E6EA', shadow: '#2A0A12' },
+  { slug: 'plante',      label: 'Plante',            emoji: '🌱', bg: '#2C4A1E', text: '#C9A96E', shadow: '#0D1F19' },
+  { slug: 'ocazii',      label: 'Ocazii Speciale',   emoji: '✨', bg: '#C9A96E', text: '#2A0A12', shadow: '#8B6B3A' },
+]
+
 function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart()
 
@@ -96,6 +104,37 @@ export default function FeaturedProducts() {
           <div className="w-16 h-px bg-accent" />
           <span className="text-accent text-lg">✿</span>
           <div className="w-16 h-px bg-accent" />
+        </div>
+
+        {/* Category buttons */}
+        <div className="flex flex-wrap justify-center gap-4 mb-14">
+          {CATEGORIES.map(cat => (
+            <Link key={cat.slug} href={`/catalog?category=${cat.slug}`} className="group">
+              <div
+                className="relative flex items-center gap-3 px-8 py-4 font-cormorant font-semibold text-xl tracking-wide select-none transition-all duration-150"
+                style={{
+                  background: cat.bg,
+                  color: cat.text,
+                  boxShadow: `5px 5px 0px ${cat.shadow}`,
+                  borderRadius: 4,
+                  transform: 'translate(0,0)',
+                }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget
+                  el.style.boxShadow = `2px 2px 0px ${cat.shadow}`
+                  el.style.transform = 'translate(3px,3px)'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget
+                  el.style.boxShadow = `5px 5px 0px ${cat.shadow}`
+                  el.style.transform = 'translate(0,0)'
+                }}
+              >
+                <span className="text-2xl leading-none">{cat.emoji}</span>
+                <span>{cat.label}</span>
+              </div>
+            </Link>
+          ))}
         </div>
 
         {loading ? (
