@@ -41,12 +41,12 @@ export default function Header() {
     { href: '/contact', label: 'Contact' },
   ]
 
-  const headerBg = isHome && !isScrolled
-    ? 'bg-transparent'
-    : 'bg-[#2A0A12]/97 backdrop-blur-sm shadow-lg border-b border-white/10'
+  const headerBg = isScrolled
+    ? 'bg-[#1a0509]/98 backdrop-blur-sm shadow-lg border-b border-white/10'
+    : 'bg-[#2A0A12]'
 
   const textColor = 'text-white'
-  const logoColor = isHome && !isScrolled ? 'text-white' : 'text-gold'
+  const logoColor = 'text-gold'
   const logoSubColor = 'text-gold'
 
   return (
