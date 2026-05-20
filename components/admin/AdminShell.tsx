@@ -8,6 +8,7 @@ const NAV = [
   { href: '/admin/comenzi', icon: '📦', label: 'Comenzi' },
   { href: '/admin/produse', icon: '🌸', label: 'Produse' },
   { href: '/admin/discounturi', icon: '🏷️', label: 'Discounturi' },
+  { href: '/admin/buchet', icon: '💐', label: 'Buchet Personalizat' },
   { href: '/admin/setari', icon: '⚙️', label: 'Setari' },
 ]
 
