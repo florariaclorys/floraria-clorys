@@ -74,26 +74,32 @@ function ProductCard({ product }: { product: Product }) {
 export default function FeaturedProducts() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/api/products?featured=true')
+    setLoading(true)
+    const url = activeCategory
+      ? `/api/products?category=${activeCategory}`
+      : '/api/products?featured=true'
+
+    fetch(url)
       .then(r => r.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setProducts(data)
-          setLoading(false)
-        } else {
-          // Fallback: show any products if none are marked featured
+        } else if (!activeCategory) {
           return fetch('/api/products')
             .then(r => r.json())
-            .then(all => {
-              setProducts(Array.isArray(all) ? all.slice(0, 8) : [])
-              setLoading(false)
-            })
+            .then(all => setProducts(Array.isArray(all) ? all.slice(0, 8) : []))
+        } else {
+          setProducts([])
         }
       })
-      .catch(() => setLoading(false))
-  }, [])
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false))
+  }, [activeCategory])
+
+  const activeCat = CATEGORIES.find(c => c.slug === activeCategory)
 
   return (
     <section className="py-24 bg-light/40">
@@ -106,36 +112,54 @@ export default function FeaturedProducts() {
           <div className="w-16 h-px bg-accent" />
         </div>
 
-        {/* Category buttons */}
+        {/* Category filter buttons */}
         <div className="flex flex-wrap justify-center gap-4 mb-14">
-          {CATEGORIES.map(cat => (
-            <Link key={cat.slug} href={`/catalog?category=${cat.slug}`} className="group">
-              <div
-                className="relative flex items-center gap-3 px-8 py-4 font-cormorant font-semibold text-xl tracking-wide select-none transition-all duration-150"
+          {CATEGORIES.map(cat => {
+            const isActive = activeCategory === cat.slug
+            return (
+              <button
+                key={cat.slug}
+                onClick={() => setActiveCategory(isActive ? null : cat.slug)}
+                className="flex items-center gap-3 px-8 py-4 font-cormorant font-semibold text-xl tracking-wide select-none"
                 style={{
                   background: cat.bg,
                   color: cat.text,
-                  boxShadow: `5px 5px 0px ${cat.shadow}`,
+                  boxShadow: isActive ? `1px 1px 0px ${cat.shadow}` : `5px 5px 0px ${cat.shadow}`,
                   borderRadius: 4,
-                  transform: 'translate(0,0)',
+                  transform: isActive ? 'translate(4px,4px)' : 'translate(0,0)',
+                  transition: 'box-shadow 0.12s, transform 0.12s',
+                  outline: isActive ? `2px solid ${cat.text}` : 'none',
+                  outlineOffset: 2,
                 }}
                 onMouseEnter={e => {
-                  const el = e.currentTarget
-                  el.style.boxShadow = `2px 2px 0px ${cat.shadow}`
-                  el.style.transform = 'translate(3px,3px)'
+                  if (!isActive) {
+                    e.currentTarget.style.boxShadow = `2px 2px 0px ${cat.shadow}`
+                    e.currentTarget.style.transform = 'translate(3px,3px)'
+                  }
                 }}
                 onMouseLeave={e => {
-                  const el = e.currentTarget
-                  el.style.boxShadow = `5px 5px 0px ${cat.shadow}`
-                  el.style.transform = 'translate(0,0)'
+                  if (!isActive) {
+                    e.currentTarget.style.boxShadow = `5px 5px 0px ${cat.shadow}`
+                    e.currentTarget.style.transform = 'translate(0,0)'
+                  }
                 }}
               >
                 <span className="text-2xl leading-none">{cat.emoji}</span>
                 <span>{cat.label}</span>
-              </div>
-            </Link>
-          ))}
+              </button>
+            )
+          })}
         </div>
+
+        {/* Section label */}
+        {activeCat && (
+          <p className="font-lato text-xs tracking-widest uppercase text-textdark/40 text-center mb-6">
+            Categorie: <span className="font-semibold text-primary">{activeCat.label}</span>
+            <button onClick={() => setActiveCategory(null)} className="ml-3 text-accent hover:text-primary underline underline-offset-2">
+              × resetează
+            </button>
+          </p>
+        )}
 
         {loading ? (
           <div className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
@@ -153,7 +177,9 @@ export default function FeaturedProducts() {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-16">
-            <p className="font-cormorant text-2xl text-primary font-light mb-2">Produsele se adaugă în curând</p>
+            <p className="font-cormorant text-2xl text-primary font-light mb-2">
+              {activeCategory ? 'Nu există produse în această categorie momentan.' : 'Produsele se adaugă în curând'}
+            </p>
             <p className="font-lato text-sm text-textdark/50">Revin-o mai târziu sau vizitează catalogul complet.</p>
           </div>
         ) : (
