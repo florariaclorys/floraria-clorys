@@ -95,20 +95,20 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         {/* Info */}
-        <div className="p-4">
-          <p className="font-lato text-xs text-accent tracking-widest uppercase mb-1">{product.category}</p>
-          <h3 className="font-cormorant text-lg font-semibold text-textdark group-hover:text-primary transition-colors leading-tight mb-2">
+        <div className="p-3">
+          <p className="font-lato text-[10px] text-accent tracking-widest uppercase mb-0.5">{product.category}</p>
+          <h3 className="font-cormorant text-base font-semibold text-textdark group-hover:text-primary transition-colors leading-tight mb-1">
             {product.name}
           </h3>
-          <p className="font-lato text-xs text-textdark/55 leading-relaxed mb-3 line-clamp-2">
+          <p className="font-lato text-[11px] text-textdark/55 leading-relaxed mb-2 line-clamp-1">
             {product.shortDescription}
           </p>
-          <div className="flex items-center gap-3">
-            <span className="font-cormorant text-2xl font-bold text-primary">
-              {product.price} <span className="text-sm font-lato font-normal">RON</span>
+          <div className="flex items-center gap-2">
+            <span className="font-cormorant text-xl font-bold text-primary">
+              {product.price} <span className="text-xs font-lato font-normal">RON</span>
             </span>
             {product.originalPrice && (
-              <span className="font-lato text-sm text-textdark/40 line-through">
+              <span className="font-lato text-xs text-textdark/40 line-through">
                 {product.originalPrice} RON
               </span>
             )}
