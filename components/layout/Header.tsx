@@ -43,15 +43,18 @@ export default function Header() {
   ]
 
   const headerBg = isScrolled
-    ? 'bg-[#1a0509]/98 backdrop-blur-sm shadow-lg border-b border-white/10'
-    : 'bg-[#2A0A12]'
+    ? 'shadow-lg border-b border-white/10'
+    : ''
 
   const textColor = 'text-white'
   const logoColor = 'text-gold'
   const logoSubColor = 'text-gold'
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBg}`}
+      style={{ backgroundColor: '#1a0509' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
 
