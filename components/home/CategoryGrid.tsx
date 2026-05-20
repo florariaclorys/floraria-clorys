@@ -4,37 +4,42 @@ const categories = [
   {
     slug: 'buchete',
     label: 'Buchete',
-    icon: '💐',
     description: 'Buchete proaspete pentru orice ocazie',
-    gradient: 'from-rose-900 to-primary',
+    bg: '#6B1A2E',
+    text: '#C9A96E',
+    shadowColor: '#2A0A12',
   },
   {
     slug: 'aranjamente',
     label: 'Aranjamente',
-    icon: '🌿',
-    description: 'Aranjamente florale elaborate',
-    gradient: 'from-emerald-900 to-emerald-700',
+    description: 'Compoziții florale elaborate',
+    bg: '#C9A96E',
+    text: '#2A0A12',
+    shadowColor: '#6B1A2E',
   },
   {
     slug: 'cutii',
     label: 'Cutii cu Flori',
-    icon: '🎁',
-    description: 'Cutii elegante pentru cadouri memorabile',
-    gradient: 'from-secondary to-accent',
+    description: 'Cadouri elegante și memorabile',
+    bg: '#8B2340',
+    text: '#F5E6EA',
+    shadowColor: '#2A0A12',
   },
   {
     slug: 'plante',
     label: 'Plante',
-    icon: '🌱',
-    description: 'Plante decorative cu durată lungă',
-    gradient: 'from-green-900 to-teal-700',
+    description: 'Decorațiuni verzi cu durată lungă',
+    bg: '#1B3A2F',
+    text: '#C9A96E',
+    shadowColor: '#0D1F19',
   },
   {
     slug: 'ocazii',
     label: 'Ocazii Speciale',
-    icon: '✨',
-    description: 'Cadouri florale pentru momente unice',
-    gradient: 'from-purple-900 to-primary',
+    description: 'Cadouri pentru momente unice',
+    bg: '#F5E6EA',
+    text: '#6B1A2E',
+    shadowColor: '#C4708A',
   },
 ]
 
@@ -50,28 +55,33 @@ export default function CategoryGrid() {
           <div className="w-16 h-px bg-accent" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {categories.map(cat => (
             <Link
               key={cat.slug}
               href={`/catalog?category=${cat.slug}`}
-              className="group relative overflow-hidden rounded-lg aspect-[3/4] flex flex-col justify-end card-hover cursor-pointer"
+              className="block category-btn-link"
             >
-              {/* Gradient background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient} transition-transform duration-500 group-hover:scale-105`} />
-
-              {/* Subtle overlay */}
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
-
-              {/* Icon */}
-              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl filter drop-shadow-lg transform transition-transform duration-300 group-hover:scale-110">
-                {cat.icon}
-              </div>
-
-              {/* Text */}
-              <div className="relative z-10 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                <p className="font-cormorant text-xl font-semibold text-white leading-tight">{cat.label}</p>
-                <p className="font-lato text-xs text-white/70 mt-1 leading-snug">{cat.description}</p>
+              <div
+                className="category-btn flex flex-col justify-center items-center py-10 px-6 text-center"
+                style={{
+                  background: cat.bg,
+                  '--cat-shadow': `6px 6px 0px ${cat.shadowColor}`,
+                  '--cat-shadow-hover': `2px 2px 0px ${cat.shadowColor}`,
+                } as React.CSSProperties}
+              >
+                <p
+                  className="font-cormorant text-2xl font-semibold mb-2 leading-tight"
+                  style={{ color: cat.text }}
+                >
+                  {cat.label}
+                </p>
+                <p
+                  className="font-lato text-xs tracking-wide leading-snug"
+                  style={{ color: cat.text, opacity: 0.75 }}
+                >
+                  {cat.description}
+                </p>
               </div>
             </Link>
           ))}
