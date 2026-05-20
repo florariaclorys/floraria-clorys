@@ -1,11 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import toast from 'react-hot-toast'
+
+const GPS_URL = 'https://www.google.com/maps/search/?api=1&query=Strada+Victoriei+28%2C+Negre%C8%99ti+Oa%C8%99%2C+Romania'
+
+interface BusinessHours {
+  weekdays: string
+  saturday: string
+  sunday: string
+}
+
+const DEFAULT_HOURS: BusinessHours = { weekdays: '09:00–19:00', saturday: '10:00–17:00', sunday: 'Închis' }
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [sending, setSending] = useState(false)
+  const [hours, setHours] = useState<BusinessHours>(DEFAULT_HOURS)
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then(r => r.json())
+      .then(data => setHours(data))
+      .catch(() => {})
+  }, [])
 
   const set = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [field]: e.target.value }))
@@ -23,12 +41,9 @@ export default function ContactPage() {
     setSending(false)
   }
 
-  const whatsapp = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '40700000000'
-
   return (
     <div className="pt-24 pb-16 min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
         <div className="text-center mb-16">
           <p className="section-subheading">Suntem alături de tine</p>
           <h1 className="section-heading">Contactează-ne</h1>
@@ -43,51 +58,24 @@ export default function ContactPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Form */}
           <div className="bg-white border border-light p-8">
             <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Trimite un mesaj</h2>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label className="label-field">Numele tău *</label>
-                <input
-                  className="input-field"
-                  value={form.name}
-                  onChange={set('name')}
-                  placeholder="Ion Popescu"
-                  required
-                />
+                <input className="input-field" value={form.name} onChange={set('name')} placeholder="Ion Popescu" required />
               </div>
               <div>
                 <label className="label-field">Email *</label>
-                <input
-                  className="input-field"
-                  type="email"
-                  value={form.email}
-                  onChange={set('email')}
-                  placeholder="email@exemplu.ro"
-                  required
-                />
+                <input className="input-field" type="email" value={form.email} onChange={set('email')} placeholder="email@exemplu.ro" required />
               </div>
               <div>
                 <label className="label-field">Telefon</label>
-                <input
-                  className="input-field"
-                  type="tel"
-                  value={form.phone}
-                  onChange={set('phone')}
-                  placeholder="07XX XXX XXX"
-                />
+                <input className="input-field" type="tel" value={form.phone} onChange={set('phone')} placeholder="07XX XXX XXX" />
               </div>
               <div>
                 <label className="label-field">Mesaj *</label>
-                <textarea
-                  className="input-field resize-none"
-                  rows={6}
-                  value={form.message}
-                  onChange={set('message')}
-                  placeholder="Spune-ne cum te putem ajuta..."
-                  required
-                />
+                <textarea className="input-field resize-none" rows={6} value={form.message} onChange={set('message')} placeholder="Spune-ne cum te putem ajuta..." required />
               </div>
               <button type="submit" disabled={sending} className="btn-primary w-full py-4">
                 {sending ? 'Se trimite...' : 'Trimite Mesajul'}
@@ -95,66 +83,67 @@ export default function ContactPage() {
             </form>
           </div>
 
-          {/* Info */}
           <div className="space-y-6">
-            {/* Contact card */}
             <div className="bg-primary p-8 text-white">
               <h2 className="font-cormorant text-2xl font-light mb-6">Informații de contact</h2>
               <div className="space-y-5">
                 {[
                   { icon: '📞', label: 'Telefon', value: '0770 930 786', href: 'tel:0770930786' },
                   { icon: '📧', label: 'Email', value: 'florariaclorys@gmail.com', href: 'mailto:florariaclorys@gmail.com' },
-                  { icon: '📍', label: 'Adresă', value: 'Strada Victoriei 28, Negrești Oaș', href: null },
+                  { icon: '📍', label: 'Adresă', value: 'Strada Victoriei 28, Negrești Oaș', href: GPS_URL },
                 ].map(item => (
                   <div key={item.label} className="flex items-start gap-4">
                     <span className="text-2xl">{item.icon}</span>
                     <div>
                       <p className="font-lato text-xs text-white/50 tracking-widest uppercase mb-0.5">{item.label}</p>
-                      {item.href ? (
-                        <a href={item.href} className="font-lato text-sm text-white hover:text-gold transition-colors">
-                          {item.value}
-                        </a>
-                      ) : (
-                        <p className="font-lato text-sm text-white/80">{item.value}</p>
-                      )}
+                      <a
+                        href={item.href}
+                        target={item.href.startsWith('http') ? '_blank' : undefined}
+                        rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="font-lato text-sm text-white hover:text-gold transition-colors"
+                      >
+                        {item.value}
+                      </a>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Hours */}
             <div className="bg-white border border-light p-6">
               <h3 className="font-cormorant text-xl font-semibold text-textdark mb-4">Program de lucru</h3>
               <div className="space-y-2">
                 {[
-                  ['Luni - Vineri', '08:00 - 20:00'],
-                  ['Sâmbătă', '09:00 - 18:00'],
-                  ['Duminică', '10:00 - 16:00'],
-                ].map(([day, hours]) => (
+                  ['Luni - Vineri', hours.weekdays],
+                  ['Sâmbătă', hours.saturday],
+                  ['Duminică', hours.sunday],
+                ].map(([day, time]) => (
                   <div key={day} className="flex justify-between items-center py-2 border-b border-light/50 last:border-0">
                     <span className="font-lato text-sm text-textdark/60">{day}</span>
-                    <span className="font-lato text-sm font-semibold text-textdark">{hours}</span>
+                    <span className="font-lato text-sm font-semibold text-textdark">{time}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Map placeholder */}
-            <div
-              className="rounded-lg overflow-hidden flex items-center justify-center"
+            <a
+              href={GPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg overflow-hidden flex items-center justify-center hover:opacity-90 transition-opacity"
               style={{ height: 200, background: 'linear-gradient(135deg, #F5E6EA, #C4708A30)' }}
+              aria-label="Deschide în Google Maps"
             >
               <div className="text-center">
                 <span className="text-4xl">📍</span>
                 <p className="font-cormorant text-lg text-primary mt-2 font-semibold">Găsește-ne pe hartă</p>
                 <p className="font-lato text-xs text-textdark/50 mt-1">Strada Victoriei 28, Negrești Oaș</p>
+                <p className="font-lato text-xs text-accent mt-2 font-semibold tracking-wide uppercase">Apasă pentru navigație GPS →</p>
               </div>
-            </div>
+            </a>
 
-            {/* WhatsApp CTA */}
             <a
-              href={`https://wa.me/${whatsapp}?text=Bună ziua! Aș dori mai multe informații.`}
+              href="https://wa.me/40770930786?text=Bună ziua! Aș dori mai multe informații."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 w-full py-4 bg-green-500 hover:bg-green-600 text-white font-lato font-semibold text-sm tracking-widest uppercase transition-colors"
