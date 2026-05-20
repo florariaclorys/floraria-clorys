@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Trash2 } from 'lucide-react'
 import { Order } from '@/types'
 
 const STATUS_CONFIG: Record<Order['status'], { label: string; color: string }> = {
@@ -14,11 +15,14 @@ const STATUS_CONFIG: Record<Order['status'], { label: string; color: string }> =
 interface OrderTableProps {
   orders: Order[]
   onStatusChange: (id: string, status: Order['status']) => Promise<void>
+  onDelete: (id: string) => Promise<void>
 }
 
-export default function OrderTable({ orders, onStatusChange }: OrderTableProps) {
+export default function OrderTable({ orders, onStatusChange, onDelete }: OrderTableProps) {
   const [selected, setSelected] = useState<Order | null>(null)
   const [updating, setUpdating] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null)
 
   const handleStatusChange = async (id: string, status: Order['status']) => {
     setUpdating(id)
@@ -26,6 +30,16 @@ export default function OrderTable({ orders, onStatusChange }: OrderTableProps) 
       await onStatusChange(id, status)
     } finally {
       setUpdating(null)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    setDeleting(id)
+    try {
+      await onDelete(id)
+    } finally {
+      setDeleting(null)
+      setConfirmDelete(null)
     }
   }
 
@@ -48,6 +62,7 @@ export default function OrderTable({ orders, onStatusChange }: OrderTableProps) 
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Data Livrare</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Status</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Acțiuni</th>
+              <th className="px-2 py-3" />
             </tr>
           </thead>
           <tbody>
@@ -87,6 +102,33 @@ export default function OrderTable({ orders, onStatusChange }: OrderTableProps) 
                           <option key={val} value={val}>{cfg.label}</option>
                         ))}
                       </select>
+                    </td>
+                    <td className="px-2 py-3" onClick={e => e.stopPropagation()}>
+                      {confirmDelete === order.id ? (
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleDelete(order.id)}
+                            disabled={deleting === order.id}
+                            className="font-lato text-[10px] bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 disabled:opacity-50 transition-colors"
+                          >
+                            {deleting === order.id ? '...' : 'Da'}
+                          </button>
+                          <button
+                            onClick={() => setConfirmDelete(null)}
+                            className="font-lato text-[10px] bg-light text-textdark/60 px-2 py-1 rounded hover:bg-light/80 transition-colors"
+                          >
+                            Nu
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setConfirmDelete(order.id)}
+                          className="w-7 h-7 flex items-center justify-center rounded text-textdark/30 hover:text-red-500 hover:bg-red-50 transition-colors"
+                          title="Șterge comanda"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 )

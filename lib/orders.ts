@@ -54,6 +54,14 @@ export async function createOrder(data: Omit<Order, 'id' | 'createdAt' | 'status
   return dbToOrder(inserted)
 }
 
+export async function deleteOrder(id: string): Promise<boolean> {
+  const { error } = await supabase
+    .from('orders')
+    .delete()
+    .eq('id', id)
+  return !error
+}
+
 export async function updateOrderStatus(id: string, status: Order['status']): Promise<Order | null> {
   const { data, error } = await supabase
     .from('orders')

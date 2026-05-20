@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getOrderById, updateOrderStatus } from '@/lib/orders'
+import { getOrderById, updateOrderStatus, deleteOrder } from '@/lib/orders'
 import { cookies } from 'next/headers'
 import { Order } from '@/types'
 
@@ -37,4 +37,16 @@ export async function PUT(
     console.error(err)
     return NextResponse.json({ error: 'Eroare la actualizare' }, { status: 500 })
   }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  if (!isAdmin()) {
+    return NextResponse.json({ error: 'Neautorizat' }, { status: 401 })
+  }
+  const ok = await deleteOrder(params.id)
+  if (!ok) return NextResponse.json({ error: 'Eroare la ștergere' }, { status: 500 })
+  return NextResponse.json({ ok: true })
 }

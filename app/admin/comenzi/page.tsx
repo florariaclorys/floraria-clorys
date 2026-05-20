@@ -34,6 +34,16 @@ export default function AdminOrdersPage() {
     refresh().finally(() => setLoading(false))
   }, [])
 
+  const handleDelete = async (id: string) => {
+    const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' })
+    if (res.ok) {
+      toast.success('Comanda a fost ștearsă!')
+      await refresh()
+    } else {
+      toast.error('Eroare la ștergere')
+    }
+  }
+
   const handleStatusChange = async (id: string, status: Order['status']) => {
     const res = await fetch(`/api/orders/${id}`, {
       method: 'PUT',
@@ -93,7 +103,7 @@ export default function AdminOrdersPage() {
           </div>
         ) : (
           <div className="bg-white border border-light rounded-lg overflow-hidden">
-            <OrderTable orders={sorted} onStatusChange={handleStatusChange} />
+            <OrderTable orders={sorted} onStatusChange={handleStatusChange} onDelete={handleDelete} />
           </div>
         )}
       </div>
