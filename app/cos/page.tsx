@@ -133,18 +133,18 @@ export default function CartPage() {
               <DiscountCode onDiscount={handleDiscount} orderValue={cartTotal} />
 
               {/* Delivery info banner */}
-              <div className="mt-4 rounded-xl overflow-hidden border border-green-200">
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-4 py-3 flex items-start gap-3">
-                  <span className="text-xl mt-0.5 flex-shrink-0">🚚</span>
-                  <div>
-                    <p className="font-cormorant text-base font-semibold text-green-800 leading-tight">
+              <div className="mt-4 rounded-lg overflow-hidden border border-green-200">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2.5 flex items-center gap-2.5">
+                  <span className="text-base flex-shrink-0">🚚</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-lato text-[11px] font-bold text-green-800 leading-tight">
                       Livrare gratuită în Negrești-Oaș
                     </p>
-                    <p className="font-lato text-[11px] text-green-700/80 mt-0.5 leading-snug">
-                      și în toate localitățile din împrejurimi — la orice comandă de minimum <strong>250 RON</strong>.
+                    <p className="font-lato text-[10px] text-green-700/70 mt-0.5 leading-snug">
+                      Inclusiv localitățile din jur · minim <strong>250 RON</strong>
                     </p>
                   </div>
-                  <span className="ml-auto flex-shrink-0 bg-green-600 text-white font-lato text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap">
+                  <span className="flex-shrink-0 bg-green-600 text-white font-lato text-[9px] font-bold px-2 py-0.5 rounded-full">
                     GRATUIT
                   </span>
                 </div>
