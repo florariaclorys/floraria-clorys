@@ -5,14 +5,53 @@ import { Toaster } from 'react-hot-toast'
 import PublicLayout from '@/components/layout/PublicLayout'
 
 export const metadata: Metadata = {
-  title: "Floraria Clory's | Flowers With Heart",
-  description: 'Floraria Clory\'s — buchete, aranjamente florale și cutii cu flori proaspete. Livrare rapidă în Țara Oașului. Comandă online flori proaspete cu mesaj personalizat.',
-  keywords: 'florarie, tara oasului, negresti oas, buchete, trandafiri, flori, aranjamente florale, livrare flori',
+  metadataBase: new URL('https://myclorys.com'),
+  title: {
+    default: "Floraria Clory's | Flori Proaspete Negrești-Oaș",
+    template: "%s | Floraria Clory's",
+  },
+  description: 'Floraria Clory\'s din Negrești-Oaș — buchete, aranjamente florale și cutii cu flori proaspete. Livrare 1-3 ore în Țara Oașului. Comandă online cu mesaj personalizat și plată ramburs.',
+  keywords: [
+    'florarie negresti oas', 'florarie tara oasului', 'flori negresti oas',
+    'buchete flori oas', 'aranjamente florale negresti', 'livrare flori oas',
+    'florarie online oas', 'buchete trandafiri', 'cutii flori', 'flori proaspete',
+    'Clory\'s florarie', 'myclorys',
+  ],
+  authors: [{ name: "Floraria Clory's", url: 'https://myclorys.com' }],
+  creator: "Floraria Clory's",
   openGraph: {
-    title: "Floraria Clory's | Flowers With Heart",
-    description: 'Flori proaspete cu livrare rapidă în Țara Oașului. Buchete, aranjamente, cutii cu flori.',
+    title: "Floraria Clory's | Flori Proaspete Negrești-Oaș",
+    description: 'Buchete, aranjamente și cutii cu flori proaspete. Livrare 1-3 ore în Țara Oașului. Comandă online!',
+    url: 'https://myclorys.com',
+    siteName: "Floraria Clory's",
     locale: 'ro_RO',
     type: 'website',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: "Floraria Clory's — Flori Proaspete Negrești-Oaș",
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Floraria Clory's | Flori Proaspete Negrești-Oaș",
+    description: 'Buchete, aranjamente și cutii cu flori. Livrare rapidă în Țara Oașului.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    // google: 'PUNE_CODUL_TAU_AICI', // îl adaugi după verificare în Search Console
   },
 }
 
