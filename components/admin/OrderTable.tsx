@@ -58,6 +58,7 @@ export default function OrderTable({ orders, onStatusChange, onDelete }: OrderTa
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">ID</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Client</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Telefon</th>
+              <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Metodă</th>
               <th className="px-4 py-3 text-right font-lato text-xs tracking-widest uppercase">Total</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Data Livrare</th>
               <th className="px-4 py-3 text-left font-lato text-xs tracking-widest uppercase">Status</th>
@@ -84,6 +85,17 @@ export default function OrderTable({ orders, onStatusChange, onDelete }: OrderTa
                     <td className="px-4 py-3 font-lato text-xs font-bold text-primary">{order.id}</td>
                     <td className="px-4 py-3 font-lato text-sm text-textdark">{order.customer.name}</td>
                     <td className="px-4 py-3 font-lato text-sm text-textdark/70">{order.customer.phone}</td>
+                    <td className="px-4 py-3">
+                      {order.fulfillmentMethod === 'ridicare' ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-lato text-xs font-semibold">
+                          🏪 Ridicare
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-lato text-xs font-semibold">
+                          🚚 Livrare
+                        </span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 font-cormorant text-lg font-bold text-primary text-right">{order.total} RON</td>
                     <td className="px-4 py-3 font-lato text-sm text-textdark/70">{formatDate(order.deliveryDate)}</td>
                     <td className="px-4 py-3">
@@ -154,6 +166,15 @@ export default function OrderTable({ orders, onStatusChange, onDelete }: OrderTa
                 <h2 className="font-cormorant text-3xl text-primary font-semibold">{selected.id}</h2>
               </div>
               <button onClick={() => setSelected(null)} className="text-textdark/40 hover:text-textdark text-2xl">✕</button>
+            </div>
+
+            {/* Fulfillment badge */}
+            <div className={`flex items-center gap-3 p-3 rounded-lg mb-5 ${selected.fulfillmentMethod === 'ridicare' ? 'bg-amber-50 border border-amber-200' : 'bg-blue-50 border border-blue-200'}`}>
+              <span className="text-2xl">{selected.fulfillmentMethod === 'ridicare' ? '🏪' : '🚚'}</span>
+              <div>
+                <p className="font-lato text-sm font-bold">{selected.fulfillmentMethod === 'ridicare' ? 'Ridicare din magazin' : 'Livrare la adresă'}</p>
+                <p className="font-lato text-xs text-textdark/60">{selected.deliveryDate} · {selected.deliveryTimeSlot}</p>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4 mb-6">

@@ -13,6 +13,7 @@ export default function CartPage() {
   const { items, removeFromCart, updateQuantity, cartTotal } = useCart()
   const [discountAmount, setDiscountAmount] = useState(0)
   const [discountCode, setDiscountCode] = useState('')
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<'livrare' | 'ridicare'>('livrare')
 
   const handleDiscount = (amount: number, code: string) => {
     setDiscountAmount(amount)
@@ -131,6 +132,39 @@ export default function CartPage() {
 
               <DiscountCode onDiscount={handleDiscount} orderValue={cartTotal} />
 
+              {/* Fulfillment method */}
+              <div className="mt-4">
+                <p className="font-lato text-xs tracking-widest uppercase text-textdark/50 mb-3">Cum dorești să primești comanda?</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { value: 'livrare', icon: '🚚', title: 'Livrare la adresă', desc: 'Aducem noi la tine' },
+                    { value: 'ridicare', icon: '🏪', title: 'Ridicare din magazin', desc: 'Vii personal la florărie' },
+                  ].map(opt => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setFulfillmentMethod(opt.value as 'livrare' | 'ridicare')}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-center ${
+                        fulfillmentMethod === opt.value
+                          ? 'border-primary bg-primary/5'
+                          : 'border-light hover:border-accent'
+                      }`}
+                    >
+                      <span className="text-2xl">{opt.icon}</span>
+                      <p className={`font-lato text-xs font-semibold ${fulfillmentMethod === opt.value ? 'text-primary' : 'text-textdark'}`}>{opt.title}</p>
+                      <p className="font-lato text-[10px] text-textdark/50">{opt.desc}</p>
+                    </button>
+                  ))}
+                </div>
+                {fulfillmentMethod === 'ridicare' && (
+                  <div className="mt-3 p-3 bg-light/60 rounded-lg">
+                    <p className="font-lato text-xs text-textdark/60">
+                      📍 <strong>Adresa florăriei:</strong> Negrești-Oaș, Satu Mare<br/>
+                      🕐 <strong>Program:</strong> L-V 09:00–19:00 · S 10:00–17:00
+                    </p>
+                  </div>
+                )}
+              </div>
+
               <div className="border-t border-light mt-4 pt-4 mb-6">
                 <div className="flex justify-between items-baseline">
                   <span className="font-cormorant text-xl font-semibold text-textdark">Total</span>
@@ -139,7 +173,7 @@ export default function CartPage() {
               </div>
 
               <Link
-                href={`/comanda?discount=${discountAmount}&code=${discountCode}&fee=${deliveryFee}&total=${total}`}
+                href={`/comanda?discount=${discountAmount}&code=${discountCode}&fee=${deliveryFee}&total=${total}&fulfillment=${fulfillmentMethod}`}
                 className="btn-primary w-full text-center block"
               >
                 Continuă către comandă

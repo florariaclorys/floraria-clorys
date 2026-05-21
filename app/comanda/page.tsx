@@ -14,6 +14,7 @@ function CheckoutContent() {
   const discountCode = searchParams.get('code') || ''
   const deliveryFee = 0
   const total = Number(searchParams.get('total') || cartTotal)
+  const fulfillmentMethod = (searchParams.get('fulfillment') || 'livrare') as 'livrare' | 'ridicare'
 
   if (items.length === 0) {
     return (
@@ -35,6 +36,7 @@ function CheckoutContent() {
           deliveryFee={deliveryFee}
           discountAmount={discountAmount}
           discountCode={discountCode}
+          fulfillmentMethod={fulfillmentMethod}
         />
       </div>
 

@@ -19,7 +19,8 @@ const tomorrow = () => {
   return new Date().toISOString().split('T')[0]
 }
 
-const STEPS = ['Date personale', 'Adresă livrare', 'Data & Oră', 'Mesaj card', 'Confirmare']
+const STEPS_LIVRARE  = ['Date personale', 'Adresă livrare', 'Data & Oră', 'Mesaj card', 'Confirmare']
+const STEPS_RIDICARE = ['Date personale', 'Data & Oră', 'Mesaj card', 'Confirmare']
 
 interface FormData {
   name: string
@@ -35,15 +36,19 @@ interface FormData {
   paymentMethod: 'ramburs' | 'transfer'
 }
 
-export default function OrderForm({ items, total, deliveryFee, discountAmount, discountCode }: {
+export default function OrderForm({ items, total, deliveryFee, discountAmount, discountCode, fulfillmentMethod = 'livrare' }: {
   items: CartItem[]
   total: number
   deliveryFee: number
   discountAmount: number
   discountCode: string
+  fulfillmentMethod?: 'livrare' | 'ridicare'
 }) {
   const router = useRouter()
   const { clearCart } = useCart()
+  const STEPS = fulfillmentMethod === 'ridicare' ? STEPS_RIDICARE : STEPS_LIVRARE
+  const totalSteps = STEPS.length
+
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState<FormData>({
@@ -66,6 +71,12 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
     setErrors(prev => ({ ...prev, [field]: '' }))
   }
 
+  // For ridicare: step1=personal, step2=date&time, step3=message, step4=confirm
+  // For livrare:  step1=personal, step2=address,   step3=date&time, step4=message, step5=confirm
+  const addressStep = fulfillmentMethod === 'livrare' ? 2 : null
+  const dateStep    = fulfillmentMethod === 'livrare' ? 3 : 2
+  const confirmStep = totalSteps
+
   const validateStep = () => {
     const errs: Partial<FormData> = {}
     if (step === 1) {
@@ -73,19 +84,19 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
       if (!form.phone.trim()) errs.phone = 'Telefonul este obligatoriu'
       if (!form.email.trim() || !form.email.includes('@')) errs.email = 'Email valid obligatoriu'
     }
-    if (step === 2) {
+    if (addressStep && step === addressStep) {
       if (!form.address.trim()) errs.address = 'Adresa este obligatorie'
       if (!form.city.trim()) errs.city = 'Orașul este obligatoriu'
     }
-    if (step === 3) {
-      if (!form.deliveryDate) errs.deliveryDate = 'Data livrării este obligatorie'
+    if (step === dateStep) {
+      if (!form.deliveryDate) errs.deliveryDate = 'Data este obligatorie'
     }
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
 
   const nextStep = () => {
-    if (validateStep()) setStep(s => Math.min(s + 1, 5))
+    if (validateStep()) setStep(s => Math.min(s + 1, totalSteps))
   }
 
   const prevStep = () => setStep(s => Math.max(s - 1, 1))
@@ -123,6 +134,7 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
           deliveryTimeSlot: form.deliveryTimeSlot,
           giftMessage: form.giftMessage || undefined,
           paymentMethod: form.paymentMethod,
+          fulfillmentMethod,
         }),
       })
       const data = await res.json()
@@ -187,8 +199,8 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
         </div>
       )}
 
-      {/* Step 2: Address */}
-      {step === 2 && (
+      {/* Step 2: Address (livrare only) */}
+      {addressStep && step === addressStep && (
         <div className="space-y-4">
           <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Adresa de livrare</h2>
           <div>
@@ -212,10 +224,12 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
         </div>
       )}
 
-      {/* Step 3: Date & Time */}
-      {step === 3 && (
+      {/* Step Date & Time */}
+      {step === dateStep && (
         <div className="space-y-4">
-          <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Data și ora livrării</h2>
+          <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">
+            {fulfillmentMethod === 'ridicare' ? 'Data și ora ridicării' : 'Data și ora livrării'}
+          </h2>
           <div>
             <label className="label-field">Data livrării *</label>
             <input
@@ -243,8 +257,8 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
         </div>
       )}
 
-      {/* Step 4: Gift message */}
-      {step === 4 && (
+      {/* Step Gift message */}
+      {step === dateStep + 1 && (
         <div className="space-y-4">
           <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Mesaj pentru card</h2>
           <p className="font-lato text-sm text-textdark/60">Opțional — includem un card scris de mână cu mesajul tău personal.</p>
@@ -263,17 +277,31 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
         </div>
       )}
 
-      {/* Step 5: Payment */}
-      {step === 5 && (
+      {/* Step Confirm */}
+      {step === confirmStep && (
         <div className="space-y-4">
-          <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Metodă de plată</h2>
-          <div className="space-y-3">
-            <div className="flex items-start gap-4 p-4 border-2 border-primary bg-light/40 rounded-lg">
-              <span className="text-2xl mt-0.5">💵</span>
-              <div>
-                <p className="font-lato text-sm font-bold text-textdark">Ramburs la livrare</p>
-                <p className="font-lato text-xs text-textdark/60 mt-0.5">Plătești cash la livrare</p>
-              </div>
+          <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-6">Confirmare comandă</h2>
+
+          {/* Fulfillment summary */}
+          <div className={`flex items-center gap-4 p-4 rounded-xl border-2 ${fulfillmentMethod === 'ridicare' ? 'border-amber-400 bg-amber-50' : 'border-primary/30 bg-primary/5'}`}>
+            <span className="text-3xl">{fulfillmentMethod === 'ridicare' ? '🏪' : '🚚'}</span>
+            <div>
+              <p className="font-lato text-sm font-bold text-textdark">
+                {fulfillmentMethod === 'ridicare' ? 'Ridicare din magazin' : 'Livrare la adresă'}
+              </p>
+              <p className="font-lato text-xs text-textdark/60 mt-0.5">
+                {fulfillmentMethod === 'ridicare'
+                  ? `Vei ridica personal pe ${form.deliveryDate} între ${form.deliveryTimeSlot}`
+                  : `Livrare pe ${form.deliveryDate} între ${form.deliveryTimeSlot}`}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4 p-4 border-2 border-primary bg-light/40 rounded-lg">
+            <span className="text-2xl mt-0.5">💵</span>
+            <div>
+              <p className="font-lato text-sm font-bold text-textdark">Ramburs {fulfillmentMethod === 'ridicare' ? 'la ridicare' : 'la livrare'}</p>
+              <p className="font-lato text-xs text-textdark/60 mt-0.5">Plătești cash când primești florile</p>
             </div>
           </div>
 
@@ -314,7 +342,7 @@ export default function OrderForm({ items, total, deliveryFee, discountAmount, d
           </button>
         ) : <div />}
 
-        {step < 5 ? (
+        {step < confirmStep ? (
           <button onClick={nextStep} className="btn-primary">
             Continuă
           </button>

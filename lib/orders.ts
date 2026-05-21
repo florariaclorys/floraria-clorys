@@ -21,6 +21,8 @@ export async function getOrderById(id: string): Promise<Order | undefined> {
 }
 
 export async function createOrder(data: Omit<Order, 'id' | 'createdAt' | 'status'>): Promise<Order> {
+  // Store fulfillmentMethod inside the customer JSON (no extra DB column needed)
+  const customerWithMeta = { ...data.customer, fulfillmentMethod: data.fulfillmentMethod || 'livrare' }
   const year = new Date().getFullYear()
   const { count } = await supabase
     .from('orders')
@@ -31,7 +33,7 @@ export async function createOrder(data: Omit<Order, 'id' | 'createdAt' | 'status
 
   const row = {
     id,
-    customer: data.customer,
+    customer: customerWithMeta,
     items: data.items,
     subtotal: data.subtotal,
     discount_code: data.discountCode || null,
@@ -87,6 +89,7 @@ function dbToOrder(row: Record<string, unknown>): Order {
     deliveryTimeSlot: row.delivery_time_slot as string,
     giftMessage: row.gift_message as string | undefined,
     paymentMethod: row.payment_method as Order['paymentMethod'],
+    fulfillmentMethod: ((row.customer as Record<string, unknown>)?.fulfillmentMethod as Order['fulfillmentMethod']) || 'livrare',
     status: row.status as Order['status'],
     createdAt: row.created_at as string,
   }

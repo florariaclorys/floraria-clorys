@@ -46,6 +46,7 @@ export interface Order {
   deliveryTimeSlot: string
   giftMessage?: string
   paymentMethod: 'ramburs' | 'transfer'
+  fulfillmentMethod: 'livrare' | 'ridicare'
   status: 'pending' | 'confirmed' | 'in_progress' | 'delivered' | 'cancelled'
   createdAt: string
 }
