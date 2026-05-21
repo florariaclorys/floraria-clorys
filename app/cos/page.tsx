@@ -141,8 +141,8 @@ export default function CartPage() {
                 </div>
                 <div className="border border-green-200 bg-green-50 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
                   <span className="text-lg">📍</span>
-                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">În toate localitățile din împrejurimi</p>
-                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">la orice comandă de minimum 250 RON</p>
+                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Împrejurimi</p>
+                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">· la orice comandă de minimum 250 RON</p>
                 </div>
               </div>
 
