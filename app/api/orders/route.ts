@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
       deliveryTimeSlot,
       giftMessage,
       paymentMethod,
+      fulfillmentMethod,
     } = body as Omit<Order, 'id' | 'createdAt' | 'status'>
 
     if (!customer?.name || !customer?.phone || !customer?.email) {
@@ -58,6 +59,7 @@ export async function POST(request: NextRequest) {
       deliveryTimeSlot,
       giftMessage,
       paymentMethod,
+      fulfillmentMethod: fulfillmentMethod || 'livrare',
     })
 
     // Use discount if present
