@@ -44,11 +44,12 @@ export default function TermeniPage() {
           </section>
 
           <section>
-            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">4. Plasarea comenzilor</h2>
+            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">4. Plasarea comenzilor și formarea contractului</h2>
             <p>
-              Comenzile se pot plasa online pe myclorys.com sau telefonic la 0770 930 786. O comandă este considerată confirmată
-              după ce clientul primește o confirmare prin email. Floraria Clory&apos;s poate refuza o comandă în cazul imposibilității
-              de onorare, cu notificarea clientului.
+              Comenzile se pot plasa online pe myclorys.com sau telefonic la 0770 930 786.
+              Contractul dintre client și Floraria Clory&apos;s se consideră încheiat în momentul în care clientul
+              primește confirmarea comenzii prin email. Până la acel moment, comanda reprezintă o ofertă de cumpărare,
+              iar Floraria Clory&apos;s poate refuza onorarea acesteia cu notificarea clientului.
             </p>
           </section>
 

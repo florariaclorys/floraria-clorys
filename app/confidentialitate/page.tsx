@@ -80,16 +80,29 @@ export default function ConfidentialitatePage() {
           </section>
 
           <section>
-            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">7. Securitatea datelor</h2>
+            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">7. Destinatarii datelor</h2>
             <p className="text-sm leading-relaxed">
-              Utilizăm măsuri tehnice și organizatorice adecvate pentru protejarea datelor (conexiune HTTPS, stocare
-              securizată prin Supabase cu criptare în repaus). Nu vindem și nu transmitem datele dumneavoastră terților,
-              cu excepția partenerilor de livrare sau a obligațiilor legale.
+              Datele dumneavoastră sunt accesate doar de echipa Floraria Clory&apos;s și de următorii procesatori de date:
+            </p>
+            <ul className="text-sm leading-relaxed list-disc pl-5 space-y-1 mt-2">
+              <li><strong>Supabase Inc.</strong> — stocare securizată a bazei de date (servere în UE, criptare în repaus)</li>
+              <li><strong>Serviciul de email</strong> — exclusiv pentru trimiterea confirmărilor de comandă</li>
+            </ul>
+            <p className="text-sm leading-relaxed mt-2">
+              Nu vindem și nu transmitem datele dumneavoastră altor terți, cu excepția obligațiilor legale.
             </p>
           </section>
 
           <section>
-            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">8. Reclamații</h2>
+            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">8. Securitatea datelor</h2>
+            <p className="text-sm leading-relaxed">
+              Utilizăm conexiune HTTPS, stocare criptată și acces restricționat pentru protejarea datelor.
+              În cazul unui incident de securitate care vă afectează datele, veți fi notificat conform GDPR.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">9. Reclamații</h2>
             <p className="text-sm leading-relaxed">
               Aveți dreptul de a depune plângere la <strong>Autoritatea Națională de Supraveghere a Prelucrării Datelor
               cu Caracter Personal (ANSPDCP)</strong>:{' '}
