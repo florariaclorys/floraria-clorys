@@ -18,7 +18,7 @@ export default function ConfidentialitatePage() {
             <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">1. Operatorul de date</h2>
             <p className="text-sm leading-relaxed">
               <strong>Floraria Clory&apos;s</strong>, Strada Victoriei 28, Negrești-Oaș, județul Satu Mare,
-              CUI: RO XXXXXXXX, email: florariaclorys@gmail.com, telefon: 0770 930 786.
+              email: florariaclorys@gmail.com, telefon: 0770 930 786.
             </p>
             <p className="text-sm leading-relaxed mt-2">
               Prelucrăm datele cu caracter personal în conformitate cu Regulamentul (UE) 2016/679 (GDPR)

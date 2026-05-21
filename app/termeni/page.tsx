@@ -18,7 +18,7 @@ export default function TermeniPage() {
             <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-3">1. Informații despre comerciant</h2>
             <p>
               <strong>Floraria Clory&apos;s</strong>, cu sediul în Strada Victoriei 28, Negrești-Oaș, județul Satu Mare,
-              CUI: RO XXXXXXXX, Nr. Reg. Com.: JXXXXXXXXXX, email: florariaclorys@gmail.com, telefon: 0770 930 786.
+              email: florariaclorys@gmail.com, telefon: 0770 930 786.
             </p>
           </section>
 
