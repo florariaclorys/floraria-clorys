@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <footer className="bg-primary text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
 
           {/* Brand */}
           <div>
@@ -105,6 +105,25 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Legal */}
+          <div>
+            <h3 className="font-lato text-xs tracking-[0.2em] uppercase font-bold text-gold mb-6">Informații Legale</h3>
+            <ul className="space-y-3">
+              {[
+                { href: '/termeni', label: 'Termeni și Condiții' },
+                { href: '/confidentialitate', label: 'Politică de Confidențialitate' },
+                { href: '/cookies', label: 'Politică Cookies' },
+                { href: '/retur', label: 'Politică de Retur' },
+              ].map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className="font-lato text-sm text-light/70 hover:text-white transition-colors hover:pl-1 inline-block">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact & Hours */}
           <div>
             <h3 className="font-lato text-xs tracking-[0.2em] uppercase font-bold text-gold mb-6">Contact & Program</h3>
@@ -146,8 +165,50 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* ANPC Section */}
+        <div className="border-t border-white/10 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <a
+                href="https://anpc.ro/ce-este-sal/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white/5 border border-white/20 hover:border-gold/50 transition-colors rounded-lg px-4 py-2.5"
+              >
+                <span className="text-lg">🛡️</span>
+                <div>
+                  <p className="font-lato text-[10px] font-bold text-gold uppercase tracking-widest leading-tight">ANPC — SAL</p>
+                  <p className="font-lato text-[9px] text-light/50 leading-tight">Soluționarea Alternativă a Litigiilor</p>
+                </div>
+              </a>
+              <a
+                href="https://ec.europa.eu/consumers/odr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white/5 border border-white/20 hover:border-gold/50 transition-colors rounded-lg px-4 py-2.5"
+              >
+                <span className="text-lg">🇪🇺</span>
+                <div>
+                  <p className="font-lato text-[10px] font-bold text-gold uppercase tracking-widest leading-tight">SOL — UE</p>
+                  <p className="font-lato text-[9px] text-light/50 leading-tight">Soluționarea Online a Litigiilor</p>
+                </div>
+              </a>
+            </div>
+            <div className="flex gap-4 text-center">
+              <div>
+                <p className="font-lato text-[9px] text-light/30 uppercase tracking-widest">CUI</p>
+                <p className="font-lato text-[10px] text-light/50 font-semibold">RO XXXXXXXX</p>
+              </div>
+              <div>
+                <p className="font-lato text-[9px] text-light/30 uppercase tracking-widest">Reg. Com.</p>
+                <p className="font-lato text-[10px] text-light/50 font-semibold">JXXXXXXXXXX</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-white/10 mt-6 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-lato text-xs text-light/40">
             © {new Date().getFullYear()} Floraria Clory&apos;s. Toate drepturile rezervate.
           </p>
