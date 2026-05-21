@@ -12,8 +12,8 @@ function CheckoutContent() {
 
   const discountAmount = Number(searchParams.get('discount') || 0)
   const discountCode = searchParams.get('code') || ''
-  const deliveryFee = Number(searchParams.get('fee') || 25)
-  const total = Number(searchParams.get('total') || cartTotal + deliveryFee)
+  const deliveryFee = 0
+  const total = Number(searchParams.get('total') || cartTotal)
 
   if (items.length === 0) {
     return (

@@ -6,8 +6,8 @@ import { useCart } from '@/context/CartContext'
 import DiscountCode from '@/components/cart/DiscountCode'
 import { useState } from 'react'
 
-const DELIVERY_FEE = 25
-const FREE_DELIVERY_THRESHOLD = 300
+const DELIVERY_FEE = 0
+const FREE_DELIVERY_THRESHOLD = 0
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, cartTotal } = useCart()
@@ -125,13 +125,8 @@ export default function CartPage() {
                 )}
                 <div className="flex justify-between font-lato text-sm text-textdark/70">
                   <span>Livrare</span>
-                  <span>{deliveryFee === 0 ? <span className="text-green-600 font-semibold">GRATUIT</span> : `${deliveryFee} RON`}</span>
+                  <span className="text-green-600 font-semibold">GRATUIT</span>
                 </div>
-                {afterDiscount < FREE_DELIVERY_THRESHOLD && (
-                  <p className="font-lato text-xs text-accent">
-                    Mai adaugă {FREE_DELIVERY_THRESHOLD - afterDiscount} RON pentru livrare gratuită!
-                  </p>
-                )}
               </div>
 
               <DiscountCode onDiscount={handleDiscount} orderValue={cartTotal} />

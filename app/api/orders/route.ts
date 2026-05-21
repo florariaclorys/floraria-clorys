@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       subtotal,
       discountCode,
       discountAmount: discountAmount || 0,
-      deliveryFee: deliveryFee || 25,
+      deliveryFee: 0,
       total,
       deliveryDate,
       deliveryTimeSlot,
