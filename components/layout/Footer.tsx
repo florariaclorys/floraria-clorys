@@ -194,16 +194,6 @@ export default function Footer() {
                 </div>
               </a>
             </div>
-            <div className="flex gap-4 text-center">
-              <div>
-                <p className="font-lato text-[9px] text-light/30 uppercase tracking-widest">CUI</p>
-                <p className="font-lato text-[10px] text-light/50 font-semibold">RO XXXXXXXX</p>
-              </div>
-              <div>
-                <p className="font-lato text-[9px] text-light/30 uppercase tracking-widest">Reg. Com.</p>
-                <p className="font-lato text-[10px] text-light/50 font-semibold">JXXXXXXXXXX</p>
-              </div>
-            </div>
           </div>
         </div>
 
