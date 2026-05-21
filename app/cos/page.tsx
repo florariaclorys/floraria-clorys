@@ -132,21 +132,17 @@ export default function CartPage() {
 
               <DiscountCode onDiscount={handleDiscount} orderValue={cartTotal} />
 
-              {/* Delivery info banner */}
-              <div className="mt-4 rounded-lg overflow-hidden border border-green-200">
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-3 py-2.5 flex items-center gap-2.5">
-                  <span className="text-base flex-shrink-0">🚚</span>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-lato text-[11px] font-bold text-green-800 leading-tight">
-                      Livrare gratuită în Negrești-Oaș
-                    </p>
-                    <p className="font-lato text-[10px] text-green-700/70 mt-0.5 leading-snug">
-                      Livrare în localitățile din jur · minim <strong>250 RON</strong>
-                    </p>
-                  </div>
-                  <span className="flex-shrink-0 bg-green-600 text-white font-lato text-[9px] font-bold px-2 py-0.5 rounded-full">
-                    GRATUIT
-                  </span>
+              {/* Delivery info cards */}
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="border border-green-200 bg-green-50 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
+                  <span className="text-lg">🚚</span>
+                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Livrare gratuită</p>
+                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">Negrești-Oaș</p>
+                </div>
+                <div className="border border-green-200 bg-green-50 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
+                  <span className="text-lg">📍</span>
+                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Împrejurimi</p>
+                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">minim 250 RON</p>
                 </div>
               </div>
 
