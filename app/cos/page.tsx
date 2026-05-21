@@ -141,7 +141,7 @@ export default function CartPage() {
                       Livrare gratuită în Negrești-Oaș
                     </p>
                     <p className="font-lato text-[10px] text-green-700/70 mt-0.5 leading-snug">
-                      Inclusiv localitățile din jur · minim <strong>250 RON</strong>
+                      Livrare în localitățile din jur · minim <strong>250 RON</strong>
                     </p>
                   </div>
                   <span className="flex-shrink-0 bg-green-600 text-white font-lato text-[9px] font-bold px-2 py-0.5 rounded-full">
