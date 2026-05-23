@@ -3,6 +3,8 @@ import './globals.css'
 import { CartProvider } from '@/context/CartContext'
 import { Toaster } from 'react-hot-toast'
 import PublicLayout from '@/components/layout/PublicLayout'
+import CursorSparkles from '@/components/ui/CursorSparkles'
+import ScrollProgress from '@/components/ui/ScrollProgress'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://myclorys.com'),
@@ -71,6 +73,8 @@ export default function RootLayout({
         />
       </head>
       <body className="font-lato bg-background text-textdark">
+        <ScrollProgress />
+        <CursorSparkles />
         <CartProvider>
           <PublicLayout>
             {children}

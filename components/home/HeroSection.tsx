@@ -2,142 +2,167 @@
 
 import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import {
+  motion,
+  useMotionValue, useSpring, useTransform,
+  useScroll,
+} from 'framer-motion'
+import MagneticButton from '@/components/ui/MagneticButton'
 
 const PETALS = ['❤', '✿', '✾', '❀', '✽', '🌸', '🌺']
 
 interface Petal {
-  id: number
-  symbol: string
-  left: number
-  delay: number
-  duration: number
-  fontSize: number
+  id: number; symbol: string; left: number
+  delay: number; duration: number; fontSize: number
 }
 
 export default function HeroSection() {
   const [petals, setPetals] = useState<Petal[]>([])
   const sectionRef = useRef<HTMLElement>(null)
 
-  // Mouse parallax
-  const rawMouseX = useMotionValue(0)
-  const rawMouseY = useMotionValue(0)
-  const mouseX = useSpring(rawMouseX, { stiffness: 60, damping: 20 })
-  const mouseY = useSpring(rawMouseY, { stiffness: 60, damping: 20 })
+  /* ── Mouse parallax ── */
+  const rawMX = useMotionValue(0)
+  const rawMY = useMotionValue(0)
+  const mx = useSpring(rawMX, { stiffness: 55, damping: 18 })
+  const my = useSpring(rawMY, { stiffness: 55, damping: 18 })
 
-  const circle1X = useTransform(mouseX, [-0.5, 0.5], [-30, 30])
-  const circle1Y = useTransform(mouseY, [-0.5, 0.5], [-20, 20])
-  const circle2X = useTransform(mouseX, [-0.5, 0.5], [20, -20])
-  const circle2Y = useTransform(mouseY, [-0.5, 0.5], [15, -15])
-  const circle3X = useTransform(mouseX, [-0.5, 0.5], [-15, 15])
-  const circle3Y = useTransform(mouseY, [-0.5, 0.5], [25, -25])
-  const textX    = useTransform(mouseX, [-0.5, 0.5], [-8, 8])
-  const textY    = useTransform(mouseY, [-0.5, 0.5], [-5, 5])
+  const c1x = useTransform(mx, [-0.5, 0.5], [-40, 40])
+  const c1y = useTransform(my, [-0.5, 0.5], [-28, 28])
+  const c2x = useTransform(mx, [-0.5, 0.5], [28, -28])
+  const c2y = useTransform(my, [-0.5, 0.5], [20, -20])
+  const c3x = useTransform(mx, [-0.5, 0.5], [-18, 18])
+  const c3y = useTransform(my, [-0.5, 0.5], [32, -32])
+  const tx  = useTransform(mx, [-0.5, 0.5], [-10, 10])
+  const ty  = useTransform(my, [-0.5, 0.5], [-6, 6])
 
-  const handleMouseMove = (e: React.MouseEvent) => {
+  /* ── Scroll parallax ── */
+  const { scrollY } = useScroll()
+  const bgY      = useTransform(scrollY, [0, 700], [0, -180])   // bg moves slow
+  const contentY = useTransform(scrollY, [0, 700], [0,  -60])   // text moves medium
+  const circle1Y = useTransform(scrollY, [0, 700], [0, -250])   // far bg moves fast
+  const fadeOut  = useTransform(scrollY, [0, 400], [1, 0])      // fade page as scroll
+
+  const onMouseMove = (e: React.MouseEvent) => {
     const rect = sectionRef.current?.getBoundingClientRect()
     if (!rect) return
-    rawMouseX.set((e.clientX - rect.left) / rect.width - 0.5)
-    rawMouseY.set((e.clientY - rect.top) / rect.height - 0.5)
+    rawMX.set((e.clientX - rect.left) / rect.width - 0.5)
+    rawMY.set((e.clientY - rect.top) / rect.height - 0.5)
   }
-  const handleMouseLeave = () => { rawMouseX.set(0); rawMouseY.set(0) }
 
   useEffect(() => {
-    const generated: Petal[] = Array.from({ length: 22 }, (_, i) => ({
+    setPetals(Array.from({ length: 24 }, (_, i) => ({
       id: i,
       symbol: PETALS[i % PETALS.length],
       left: Math.random() * 100,
       delay: Math.random() * 10,
-      duration: 8 + Math.random() * 8,
-      fontSize: 10 + Math.random() * 18,
-    }))
-    setPetals(generated)
+      duration: 8 + Math.random() * 9,
+      fontSize: 10 + Math.random() * 20,
+    })))
   }, [])
 
   return (
     <section
       ref={sectionRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={onMouseMove}
+      onMouseLeave={() => { rawMX.set(0); rawMY.set(0) }}
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #2A0A12 0%, #6B1A2E 45%, #8B2340 75%, #4A0D1E 100%)' }}
     >
-      {/* Animated petals */}
-      {petals.map(petal => (
-        <span key={petal.id} className="petal" style={{
-          left: `${petal.left}%`,
-          animationDelay: `${petal.delay}s`,
-          animationDuration: `${petal.duration}s`,
-          fontSize: `${petal.fontSize}px`,
-          color: `hsl(${330 + Math.random() * 30}, 80%, ${60 + Math.random() * 20}%)`,
-        }}>{petal.symbol}</span>
-      ))}
+      {/* ── Scrolling background layer (slowest) ── */}
+      <motion.div
+        style={{ y: bgY }}
+        className="absolute inset-0 z-0"
+      >
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(135deg, #2A0A12 0%, #6B1A2E 40%, #8B2340 72%, #4A0D1E 100%)',
+        }} />
+        {/* Animated gradient glow that breathes */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{ opacity: [0.4, 0.7, 0.4] }}
+          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+          style={{ background: 'radial-gradient(ellipse at 60% 40%, rgba(139,35,64,0.6) 0%, transparent 65%)' }}
+        />
+        <motion.div
+          className="absolute inset-0"
+          animate={{ opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+          style={{ background: 'radial-gradient(ellipse at 30% 70%, rgba(107,26,46,0.5) 0%, transparent 55%)' }}
+        />
+      </motion.div>
 
-      {/* Parallax decorative circles — depth layers */}
-      <motion.div
-        style={{ x: circle1X, y: circle1Y }}
-        className="absolute top-1/4 -left-32 w-96 h-96 rounded-full border border-white/8 pointer-events-none"
-      />
-      <motion.div
-        style={{ x: circle1X, y: circle1Y }}
-        className="absolute top-1/4 -left-32 w-80 h-80 rounded-full border border-white/5 pointer-events-none"
-      />
-      <motion.div
-        style={{ x: circle2X, y: circle2Y }}
-        className="absolute bottom-1/4 -right-48 w-[500px] h-[500px] rounded-full border border-white/6 pointer-events-none"
-      />
-      <motion.div
-        style={{ x: circle2X, y: circle2Y }}
-        className="absolute bottom-1/3 -right-32 w-64 h-64 rounded-full border border-gold/10 pointer-events-none"
-      />
-      <motion.div
-        style={{ x: circle3X, y: circle3Y }}
-        className="absolute top-1/2 left-1/3 w-48 h-48 rounded-full border border-white/4 pointer-events-none"
-      />
+      {/* ── Petals layer (mid speed) ── */}
+      <motion.div style={{ y: useTransform(scrollY, [0, 700], [0, -110]) }} className="absolute inset-0 z-1 pointer-events-none">
+        {petals.map(p => (
+          <span key={p.id} className="petal" style={{
+            left: `${p.left}%`,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+            fontSize: `${p.fontSize}px`,
+            color: `hsl(${328 + Math.random() * 35}, 80%, ${58 + Math.random() * 22}%)`,
+          }}>{p.symbol}</span>
+        ))}
+      </motion.div>
 
-      {/* Radial vignette */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.45) 100%)' }} />
+      {/* ── Parallax circles (mouse + scroll) ── */}
+      <motion.div style={{ x: c1x, y: useTransform([c1y, circle1Y], ([a, b]: number[]) => a + b) }}
+        className="absolute top-1/4 -left-32 w-[420px] h-[420px] rounded-full border border-white/8 pointer-events-none z-2" />
+      <motion.div style={{ x: c1x, y: useTransform([c1y, circle1Y], ([a, b]: number[]) => a + b + 20) }}
+        className="absolute top-1/4 -left-32 w-80 h-80 rounded-full border border-gold/8 pointer-events-none z-2" />
 
-      {/* Content with subtle parallax */}
-      <motion.div
-        style={{ x: textX, y: textY }}
+      <motion.div style={{ x: c2x, y: c2y }}
+        className="absolute bottom-1/4 -right-48 w-[540px] h-[540px] rounded-full border border-white/6 pointer-events-none z-2" />
+      <motion.div style={{ x: c2x, y: c2y }}
+        className="absolute bottom-1/3 -right-24 w-72 h-72 rounded-full border border-gold/10 pointer-events-none z-2" />
+
+      <motion.div style={{ x: c3x, y: c3y }}
+        className="absolute top-2/3 left-1/4 w-52 h-52 rounded-full border border-white/5 pointer-events-none z-2" />
+
+      {/* ── Vignette ── */}
+      <div className="absolute inset-0 z-3 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.5) 100%)' }} />
+
+      {/* ── Content (fades on scroll) ── */}
+      <motion.div style={{ x: tx, y: useTransform([ty, contentY], ([a, b]: number[]) => a + b), opacity: fadeOut }}
         className="relative z-10 text-center px-4 max-w-4xl mx-auto"
       >
+        {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: 20, letterSpacing: '0.8em' }}
           animate={{ opacity: 1, y: 0, letterSpacing: '0.4em' }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="font-lato text-xs uppercase text-gold mb-6"
-        >
-          Bine ai venit la
-        </motion.p>
+        >Bine ai venit la</motion.p>
 
-        <motion.h2
-          initial={{ opacity: 0, y: 40, filter: 'blur(12px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="font-greatvibes text-6xl md:text-8xl text-gold mb-4 leading-none drop-shadow-lg"
-        >
-          Flowers With Heart
-        </motion.h2>
+        {/* Script title with letter-by-letter reveal */}
+        <div className="overflow-hidden mb-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 80, filter: 'blur(16px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="font-greatvibes text-6xl md:text-8xl text-gold leading-none drop-shadow-lg"
+          >Flowers With Heart</motion.h2>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="font-cormorant text-5xl md:text-7xl font-light text-white mb-6 leading-tight"
-        >
-          Floraria Clory&apos;s
-        </motion.h1>
+        {/* Main title */}
+        <div className="overflow-hidden mb-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 60, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="font-cormorant text-5xl md:text-7xl font-light text-white leading-tight"
+          >Floraria Clory&apos;s</motion.h1>
+        </div>
 
+        {/* Gold line */}
         <motion.div
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.9, delay: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, delay: 1, ease: [0.22, 1, 0.36, 1] }}
           className="w-24 h-px bg-gold mx-auto mb-6"
+          style={{ boxShadow: '0 0 12px rgba(201,169,110,0.8)' }}
         />
 
+        {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -148,35 +173,46 @@ export default function HeroSection() {
           Transformăm fiecare moment special într-o amintire de neuitat.
         </motion.p>
 
+        {/* CTA buttons — magnetic */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.35 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-5"
         >
-          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
-            <Link href="/catalog" className="btn-primary">Descoperă Colecția</Link>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.97 }}>
-            <Link href="/catalog" className="btn-secondary">Comandă Acum</Link>
-          </motion.div>
+          <MagneticButton strength={0.4}>
+            <Link href="/catalog" className="btn-primary px-10 py-4 text-base">
+              Descoperă Colecția
+            </Link>
+          </MagneticButton>
+          <MagneticButton strength={0.4}>
+            <Link href="/catalog" className="btn-secondary px-10 py-4 text-base">
+              Comandă Acum
+            </Link>
+          </MagneticButton>
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* ── Scroll indicator ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 2.2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        style={{ opacity: fadeOut }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
       >
         <motion.div
           className="flex flex-col items-center gap-2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
         >
-          <span className="font-lato text-xs tracking-widest uppercase text-white/40">Derulează</span>
-          <div className="w-px h-12 bg-gradient-to-b from-white/40 to-transparent" />
+          <span className="font-lato text-[10px] tracking-[0.3em] uppercase text-white/35">Derulează</span>
+          <motion.div
+            className="w-[1px] h-14 origin-top"
+            style={{ background: 'linear-gradient(to bottom, rgba(201,169,110,0.7), transparent)' }}
+            animate={{ scaleY: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
+          />
         </motion.div>
       </motion.div>
     </section>

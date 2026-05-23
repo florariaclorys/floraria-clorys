@@ -11,6 +11,7 @@ import {
 import { Product } from '@/types'
 import { useCart } from '@/context/CartContext'
 import { StaggerContainer, staggerItem } from '@/components/ui/ScrollReveal'
+import MagneticButton from '@/components/ui/MagneticButton'
 
 const CATEGORIES = [
   { slug: 'buchete',     label: 'Buchete',          emoji: '💐', bg: '#6B1A2E', text: '#C9A96E', shadow: '#2A0A12' },
@@ -390,18 +391,15 @@ export default function FeaturedProducts() {
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
-          <Link
-            href="/catalog"
-            className="btn-outline inline-flex items-center gap-2 group"
-          >
-            <span>Vezi toate produsele</span>
-            <motion.span
-              animate={{ x: [0, 5, 0] }}
-              transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-            >
-              →
-            </motion.span>
-          </Link>
+          <MagneticButton strength={0.3}>
+            <Link href="/catalog" className="btn-outline inline-flex items-center gap-2 group">
+              <span>Vezi toate produsele</span>
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+              >→</motion.span>
+            </Link>
+          </MagneticButton>
         </motion.div>
       </div>
     </section>

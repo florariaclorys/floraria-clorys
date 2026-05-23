@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import toast from 'react-hot-toast'
+import MagneticButton from '@/components/ui/MagneticButton'
 
 interface Review {
   id: string
@@ -169,7 +170,15 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section className="py-24 bg-background overflow-hidden">
+    <section className="py-24 bg-background overflow-hidden relative">
+      {/* Clip-path reveal stripe at top */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-32 bg-light/40 pointer-events-none"
+        initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
+        whileInView={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Heading */}
@@ -270,11 +279,14 @@ export default function TestimonialsSection() {
               <label className="label-field">Mesajul tău *</label>
               <textarea className="input-field resize-none" rows={4} value={form.text} onChange={e => setForm(f => ({ ...f, text: e.target.value }))} placeholder="Spune-ne ce ți-a plăcut..." required />
             </div>
-            <motion.button type="submit" disabled={sending} className="btn-primary w-full py-4 flex items-center justify-center gap-2"
-              whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            >
-              {sending ? 'Se trimite...' : <><span>✿</span> Trimite Recenzia</>}
-            </motion.button>
+            <MagneticButton strength={0.2} className="w-full">
+              <motion.button type="submit" disabled={sending}
+                className="btn-primary w-full py-4 flex items-center justify-center gap-2"
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+              >
+                {sending ? 'Se trimite...' : <><span>✿</span> Trimite Recenzia</>}
+              </motion.button>
+            </MagneticButton>
           </form>
         </motion.div>
       </div>
