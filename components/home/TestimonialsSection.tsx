@@ -242,13 +242,6 @@ export default function TestimonialsSection() {
               </p>
               <p className="font-lato text-xs tracking-widest uppercase text-white/50 mt-1">Rating mediu</p>
             </div>
-            <div className="w-px h-12 bg-white/10 hidden sm:block" />
-            <div className="text-center">
-              <p className="font-cormorant text-5xl font-bold text-gold">
-                <Counter target={3} suffix=" ani" />
-              </p>
-              <p className="font-lato text-xs tracking-widest uppercase text-white/50 mt-1">De experiență</p>
-            </div>
           </div>
         </motion.div>
 
