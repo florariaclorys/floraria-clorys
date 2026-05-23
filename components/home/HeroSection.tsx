@@ -103,19 +103,6 @@ export default function HeroSection() {
         ))}
       </motion.div>
 
-      {/* ── Parallax circles (mouse + scroll) ── */}
-      <motion.div style={{ x: c1x, y: useTransform([c1y, circle1Y], ([a, b]: number[]) => a + b) }}
-        className="absolute top-1/4 -left-32 w-[420px] h-[420px] rounded-full border border-white/8 pointer-events-none z-2" />
-      <motion.div style={{ x: c1x, y: useTransform([c1y, circle1Y], ([a, b]: number[]) => a + b + 20) }}
-        className="absolute top-1/4 -left-32 w-80 h-80 rounded-full border border-gold/8 pointer-events-none z-2" />
-
-      <motion.div style={{ x: c2x, y: c2y }}
-        className="absolute bottom-1/4 -right-48 w-[540px] h-[540px] rounded-full border border-white/6 pointer-events-none z-2" />
-      <motion.div style={{ x: c2x, y: c2y }}
-        className="absolute bottom-1/3 -right-24 w-72 h-72 rounded-full border border-gold/10 pointer-events-none z-2" />
-
-      <motion.div style={{ x: c3x, y: c3y }}
-        className="absolute top-2/3 left-1/4 w-52 h-52 rounded-full border border-white/5 pointer-events-none z-2" />
 
       {/* ── Vignette ── */}
       <div className="absolute inset-0 z-3 pointer-events-none"
