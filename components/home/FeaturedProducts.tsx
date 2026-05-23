@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef, useMemo } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
-import { ShoppingBag, Zap } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 import toast from 'react-hot-toast'
 import {
   motion, useMotionValue, useTransform, useSpring,
@@ -10,92 +10,33 @@ import {
 } from 'framer-motion'
 import { Product } from '@/types'
 import { useCart } from '@/context/CartContext'
+import { StaggerContainer, staggerItem } from '@/components/ui/ScrollReveal'
 import MagneticButton from '@/components/ui/MagneticButton'
 
-/* ─── Category config with neon glow colors ─── */
 const CATEGORIES = [
-  { slug: 'buchete',     label: 'Buchete',          emoji: '💐', glow: '201,80,120',   border: '#C95078' },
-  { slug: 'aranjamente', label: 'Aranjamente',       emoji: '🌿', glow: '80,180,120',  border: '#50B478' },
-  { slug: 'cutii',       label: 'Cutii cu Flori',    emoji: '🎁', glow: '201,100,80',  border: '#C96450' },
-  { slug: 'plante',      label: 'Plante',            emoji: '🌱', glow: '100,200,100', border: '#64C864' },
-  { slug: 'ocazii',      label: 'Ocazii Speciale',   emoji: '✨', glow: '201,169,110', border: '#C9A96E' },
+  { slug: 'buchete',     label: 'Buchete',          emoji: '💐', bg: '#6B1A2E', text: '#C9A96E', shadow: '#2A0A12' },
+  { slug: 'aranjamente', label: 'Aranjamente',       emoji: '🌿', bg: '#1B3A2F', text: '#C9A96E', shadow: '#0D1F19' },
+  { slug: 'cutii',       label: 'Cutii cu Flori',    emoji: '🎁', bg: '#8B2340', text: '#F5E6EA', shadow: '#2A0A12' },
+  { slug: 'plante',      label: 'Plante',            emoji: '🌱', bg: '#2C4A1E', text: '#C9A96E', shadow: '#0D1F19' },
+  { slug: 'ocazii',      label: 'Ocazii Speciale',   emoji: '✨', bg: '#C9A96E', text: '#2A0A12', shadow: '#8B6B3A' },
 ]
 
-/* ─── Particle field ─── */
-function ParticleField() {
-  const particles = useMemo(() => Array.from({ length: 70 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 1 + Math.random() * 2.5,
-    delay: Math.random() * 5,
-    duration: 2.5 + Math.random() * 4,
-    opacity: 0.15 + Math.random() * 0.5,
-    color: Math.random() > 0.6
-      ? `rgba(201,169,110,${0.4 + Math.random() * 0.5})`
-      : `rgba(255,${120 + Math.floor(Math.random() * 80)},${140 + Math.floor(Math.random() * 80)},${0.3 + Math.random() * 0.4})`,
-  })), [])
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {particles.map(p => (
-        <div
-          key={p.id}
-          className="particle-dot absolute rounded-full"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: p.size,
-            height: p.size,
-            background: p.color,
-            boxShadow: `0 0 ${p.size * 3}px ${p.color}`,
-            animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`,
-          }}
-        />
-      ))}
-
-      {/* Grid lines */}
-      <div className="absolute inset-0" style={{
-        backgroundImage: `
-          linear-gradient(rgba(201,169,110,0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(201,169,110,0.04) 1px, transparent 1px)
-        `,
-        backgroundSize: '60px 60px',
-        animation: 'gridGlow 6s ease-in-out infinite',
-      }} />
-
-      {/* Corner accents */}
-      {['top-6 left-6', 'top-6 right-6', 'bottom-6 left-6', 'bottom-6 right-6'].map((pos, i) => (
-        <div key={i} className={`absolute ${pos} w-8 h-8 opacity-20`}
-          style={{
-            borderTop: i < 2 ? '1px solid #C9A96E' : 'none',
-            borderBottom: i >= 2 ? '1px solid #C9A96E' : 'none',
-            borderLeft: i % 2 === 0 ? '1px solid #C9A96E' : 'none',
-            borderRight: i % 2 === 1 ? '1px solid #C9A96E' : 'none',
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
-/* ─── Holographic Tilt Card ─── */
-function HoloCard({ children, glowColor = '201,169,110', floatDelay = 0 }: {
-  children: React.ReactNode; glowColor?: string; floatDelay?: number
-}) {
+/* ─── 3D Holographic Tilt Card ─── */
+function TiltCard({ children, className }: { children: React.ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
   const rawX = useMotionValue(0)
   const rawY = useMotionValue(0)
-  const x = useSpring(rawX, { stiffness: 300, damping: 28 })
-  const y = useSpring(rawY, { stiffness: 300, damping: 28 })
 
-  const rotateX = useTransform(y, [-0.5, 0.5], [14, -14])
-  const rotateY = useTransform(x, [-0.5, 0.5], [-14, 14])
-  const glowX   = useTransform(x, [-0.5, 0.5], [15, 85])
-  const glowY   = useTransform(y, [-0.5, 0.5], [15, 85])
-  const liftZ   = useSpring(hovered ? 30 : 0, { stiffness: 250, damping: 22 })
+  const springConfig = { stiffness: 280, damping: 28 }
+  const x = useSpring(rawX, springConfig)
+  const y = useSpring(rawY, springConfig)
+
+  const rotateX = useTransform(y, [-0.5, 0.5], [12, -12])
+  const rotateY = useTransform(x, [-0.5, 0.5], [-12, 12])
+  const glowX   = useTransform(x, [-0.5, 0.5], [20, 80])
+  const glowY   = useTransform(y, [-0.5, 0.5], [20, 80])
+  const shadowX = useTransform(x, [-0.5, 0.5], [-20, 20])
+  const shadowY = useTransform(y, [-0.5, 0.5], [-20, 20])
 
   const onMouseMove = (e: React.MouseEvent) => {
     const rect = ref.current?.getBoundingClientRect()
@@ -103,69 +44,54 @@ function HoloCard({ children, glowColor = '201,169,110', floatDelay = 0 }: {
     rawX.set((e.clientX - rect.left) / rect.width - 0.5)
     rawY.set((e.clientY - rect.top) / rect.height - 0.5)
   }
-
-  const onLeave = () => {
-    rawX.set(0); rawY.set(0); setHovered(false)
-  }
+  const onMouseLeave = () => { rawX.set(0); rawY.set(0) }
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={onMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={onLeave}
+      onMouseLeave={onMouseLeave}
       style={{
         rotateX, rotateY,
-        z: liftZ,
         transformStyle: 'preserve-3d',
         perspective: 900,
-        boxShadow: hovered
-          ? `0 0 0 1px rgba(${glowColor},0.6), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(${glowColor},0.25), 0 0 100px rgba(${glowColor},0.1)`
-          : `0 0 0 1px rgba(${glowColor},0.2), 0 20px 50px rgba(0,0,0,0.5), 0 0 30px rgba(${glowColor},0.08)`,
-        transition: 'box-shadow 0.4s ease',
-      }}
-      className="futuristic-float"
-      css-anim-delay=""
-    >
-      <style>{`
-        .futuristic-float { animation-duration: ${4.5 + floatDelay * 0.4}s; animation-delay: ${floatDelay * 0.3}s; }
-      `}</style>
-      {children}
-
-      {/* Rainbow holographic sheen */}
-      <motion.div style={{
-        background: useTransform([glowX, glowY], ([gx, gy]: number[]) =>
-          `radial-gradient(circle at ${gx}% ${gy}%, rgba(${glowColor},0.22) 0%, rgba(255,200,220,0.06) 35%, transparent 60%)`
+        boxShadow: useTransform(
+          [shadowX, shadowY],
+          ([sx, sy]: number[]) =>
+            `${sx}px ${sy + 8}px 40px rgba(42,10,18,0.18), 0 2px 8px rgba(42,10,18,0.08)`
         ),
-        position: 'absolute', inset: 0, borderRadius: 'inherit',
-        pointerEvents: 'none', zIndex: 20,
-      }} />
-
-      {/* Edge glow when hovered */}
-      {hovered && (
-        <div className="absolute inset-0 rounded-inherit pointer-events-none z-10" style={{
-          background: `linear-gradient(135deg, rgba(${glowColor},0.08) 0%, transparent 40%, rgba(${glowColor},0.05) 100%)`,
+      }}
+      className={className}
+    >
+      {children}
+      {/* Holographic shine overlay */}
+      <motion.div
+        style={{
+          background: useTransform(
+            [glowX, glowY],
+            ([gx, gy]: number[]) =>
+              `radial-gradient(circle at ${gx}% ${gy}%, rgba(201,169,110,0.18) 0%, rgba(255,255,255,0.07) 40%, transparent 65%)`
+          ),
+          position: 'absolute',
+          inset: 0,
           borderRadius: 'inherit',
-        }} />
-      )}
+          pointerEvents: 'none',
+          zIndex: 10,
+        }}
+      />
     </motion.div>
   )
 }
 
-/* ─── Glass Product Card ─── */
-function ProductCard({ product, index }: { product: Product; index: number }) {
+/* ─── Product Card ─── */
+function ProductCard({ product }: { product: Product }) {
   const { addToCart } = useCart()
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-50px' })
-
-  const cat = CATEGORIES.find(c => c.slug === product.category)
-  const glowColor = cat?.glow ?? '201,169,110'
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault()
     addToCart(product, 1)
     toast.success(`${product.name} adăugat în coș! 🌸`, {
-      style: { background: '#0D0306', color: '#C9A96E', border: '1px solid rgba(201,169,110,0.3)' },
+      style: { background: '#FDF8F9', color: '#2A0A12', border: '1px solid #F5E6EA' },
     })
   }
 
@@ -175,234 +101,125 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
     : product.category === 'plante' ? '🌱' : '✨'
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 60, scale: 0.88, filter: 'blur(8px)' }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' } : {}}
-      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <HoloCard glowColor={glowColor} floatDelay={index}>
-        <Link href={`/produs/${product.slug}`}>
-          <div
-            className="flex flex-col rounded-xl overflow-hidden relative"
-            style={{
-              background: 'linear-gradient(145deg, rgba(20,5,10,0.85) 0%, rgba(42,10,18,0.75) 100%)',
-              backdropFilter: 'blur(20px)',
-              border: `1px solid rgba(${glowColor},0.25)`,
-            }}
-          >
-            {/* Image */}
-            <div className="relative overflow-hidden" style={{ aspectRatio: '3/4' }}>
-              {product.images?.[0] ? (
-                <>
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
-                    style={{ filter: 'brightness(0.92) contrast(1.05) saturate(1.1)' }}
-                  />
-                  {/* Scanline overlay */}
-                  <div className="absolute inset-0 pointer-events-none" style={{
-                    background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px)',
-                    mixBlendMode: 'multiply',
-                  }} />
-                </>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center"
-                  style={{ background: `radial-gradient(ellipse at center, rgba(${glowColor},0.15) 0%, rgba(10,3,6,0.8) 70%)` }}
-                >
-                  <motion.span
-                    className="text-7xl"
-                    animate={{ y: [0, -8, 0], rotateZ: [0, 3, -3, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                  >{emoji}</motion.span>
-                </div>
-              )}
-
-              {/* Top gradient overlay */}
-              <div className="absolute inset-0 pointer-events-none" style={{
-                background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 40%, rgba(0,0,0,0.5) 100%)',
-              }} />
-
-              {/* NEW badge */}
-              {product.isNew && (
-                <div className="absolute top-3 left-3 z-10">
-                  <motion.span
-                    animate={{ opacity: [1, 0.6, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    className="flex items-center gap-1 font-lato text-[9px] font-bold px-2 py-1 tracking-widest uppercase"
-                    style={{
-                      background: 'rgba(0,0,0,0.7)',
-                      border: '1px solid rgba(100,200,100,0.6)',
-                      color: '#64C864',
-                      boxShadow: '0 0 10px rgba(100,200,100,0.4)',
-                    }}
-                  >
-                    <Zap size={8} /> NOU
-                  </motion.span>
-                </div>
-              )}
-
-              {/* Category chip */}
-              <div className="absolute top-3 right-3 z-10">
-                <span className="font-lato text-[9px] px-2 py-0.5 tracking-widest uppercase"
-                  style={{
-                    background: `rgba(${glowColor},0.15)`,
-                    border: `1px solid rgba(${glowColor},0.35)`,
-                    color: `rgba(${glowColor},1)`,
-                    backdropFilter: 'blur(8px)',
-                  }}
-                >{product.category}</span>
-              </div>
-
-              {/* Quick-add */}
-              <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
-                <button onClick={handleAdd}
-                  className="w-full flex items-center justify-center gap-2 py-3 font-lato text-xs font-semibold tracking-widest uppercase"
-                  style={{ background: `rgba(${glowColor},0.9)`, color: '#0D0306', backdropFilter: 'blur(8px)' }}
-                >
-                  <ShoppingBag size={13} /> Adaugă în coș
-                </button>
-              </div>
-            </div>
-
-            {/* Info */}
-            <div className="p-4 flex flex-col flex-1">
-              <h3 className="font-cormorant text-xl font-semibold leading-snug mb-1"
-                style={{ color: '#F5E6EA' }}
-              >{product.name}</h3>
-              <p className="font-lato text-xs leading-relaxed mb-3 line-clamp-2 flex-1"
-                style={{ color: 'rgba(245,230,234,0.5)' }}
-              >{product.shortDescription}</p>
-
-              <div className="flex items-center justify-between pt-3"
-                style={{ borderTop: `1px solid rgba(${glowColor},0.15)` }}
+    <TiltCard className="group flex flex-col bg-white rounded-2xl overflow-hidden cursor-pointer relative">
+      <Link href={`/produs/${product.slug}`} className="flex flex-col flex-1">
+        {/* Image */}
+        <div className="relative overflow-hidden bg-[#f9eef1]" style={{ aspectRatio: '3/4' }}>
+          {product.images?.[0] ? (
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
+              style={{ transition: 'transform 0.7s cubic-bezier(0.22,1,0.36,1)' }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <motion.span
+                className="text-7xl filter drop-shadow"
+                style={{ transformStyle: 'preserve-3d', translateZ: 30 }}
+                whileHover={{ scale: 1.15, rotate: [-3, 3, -3, 0] }}
+                transition={{ duration: 0.5 }}
               >
-                <span className="font-cormorant text-2xl font-bold" style={{ color: `rgba(${glowColor},1)` }}>
-                  {product.price} <span className="text-sm font-lato font-normal" style={{ color: `rgba(${glowColor},0.6)` }}>RON</span>
-                </span>
-                <motion.button onClick={handleAdd}
-                  whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-1.5 px-3 py-2 font-lato text-[10px] font-bold tracking-wider uppercase"
-                  style={{
-                    background: `rgba(${glowColor},0.12)`,
-                    border: `1px solid rgba(${glowColor},0.4)`,
-                    color: `rgba(${glowColor},1)`,
-                    boxShadow: `0 0 12px rgba(${glowColor},0.15)`,
-                  }}
-                >
-                  <ShoppingBag size={11} /> Adaugă
-                </motion.button>
-              </div>
+                {emoji}
+              </motion.span>
             </div>
+          )}
+
+          {product.isNew && (
+            <span className="absolute top-3 left-3 bg-green-600 text-white font-lato text-[10px] font-bold px-2.5 py-1 rounded-sm tracking-widest uppercase z-20">
+              Nou
+            </span>
+          )}
+
+          {/* Quick-add overlay */}
+          <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+            <button
+              onClick={handleAdd}
+              className="w-full flex items-center justify-center gap-2 bg-primary/95 backdrop-blur-sm text-white py-3 font-lato text-xs font-semibold tracking-widest uppercase hover:bg-secondary transition-colors"
+            >
+              <ShoppingBag size={14} />
+              Adaugă în coș
+            </button>
           </div>
-        </Link>
-      </HoloCard>
-    </motion.div>
+        </div>
+
+        {/* Info */}
+        <div className="p-5 flex flex-col flex-1">
+          <p className="font-lato text-[10px] text-accent tracking-[0.2em] uppercase mb-2">{product.category}</p>
+          <h3 className="font-cormorant text-xl text-textdark font-semibold leading-snug mb-2 group-hover:text-primary transition-colors">
+            {product.name}
+          </h3>
+          <p className="font-lato text-xs text-textdark/55 leading-relaxed mb-4 line-clamp-2 flex-1">
+            {product.shortDescription}
+          </p>
+          <div className="flex items-center justify-between pt-3 border-t border-light">
+            <span className="font-cormorant text-2xl font-bold text-primary">
+              {product.price} <span className="text-sm font-lato font-normal">RON</span>
+            </span>
+            <button
+              onClick={handleAdd}
+              className="flex items-center gap-1.5 bg-primary text-white px-4 py-2 text-[11px] font-lato font-semibold tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors"
+            >
+              <ShoppingBag size={13} />
+              Adaugă
+            </button>
+          </div>
+        </div>
+      </Link>
+    </TiltCard>
   )
 }
 
-/* ─── Animated section title ─── */
-function GlowTitle({ text }: { text: string }) {
+/* ─── Animated Section Heading ─── */
+function AnimatedHeading({ text, className }: { text: string; className?: string }) {
+  const ref = useRef<HTMLHeadingElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const words = text.split(' ')
+
+  return (
+    <h2 ref={ref} className={className} aria-label={text}>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 40, filter: 'blur(10px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.7, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="inline-block mr-3"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </h2>
+  )
+}
+
+/* ─── Divider ─── */
+function AnimatedDivider() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
   return (
-    <div ref={ref} className="text-center mb-4">
-      <motion.p
-        initial={{ opacity: 0, letterSpacing: '0.6em' }}
-        animate={inView ? { opacity: 1, letterSpacing: '0.3em' } : {}}
-        transition={{ duration: 0.8 }}
-        className="font-lato text-xs uppercase mb-3 tracking-widest"
-        style={{ color: '#C9A96E', textShadow: '0 0 20px rgba(201,169,110,0.6)' }}
-      >Selecție</motion.p>
-
-      <div className="overflow-hidden">
-        <motion.h2
-          initial={{ y: 70, opacity: 0, filter: 'blur(12px)' }}
-          animate={inView ? { y: 0, opacity: 1, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="font-cormorant text-5xl md:text-6xl font-light"
-          style={{
-            color: '#F5E6EA',
-            textShadow: '0 0 40px rgba(201,169,110,0.25), 0 0 80px rgba(201,169,110,0.1)',
-          }}
-        >
-          {text.split(' ').map((word, i) => (
-            <motion.span key={i} className="inline-block mr-4"
-              initial={{ opacity: 0, y: 40 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.2 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-            >{word}</motion.span>
-          ))}
-        </motion.h2>
-      </div>
-
-      {/* Animated divider */}
+    <div ref={ref} className="section-divider">
       <motion.div
         initial={{ scaleX: 0, opacity: 0 }}
         animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-        transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="flex items-center justify-center gap-4 mt-6 mb-10"
-      >
-        <div className="h-px w-20" style={{ background: 'linear-gradient(to right, transparent, #C9A96E)' }} />
-        <motion.span
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-          style={{ color: '#C9A96E', textShadow: '0 0 15px rgba(201,169,110,0.8)', fontSize: 18 }}
-        >✦</motion.span>
-        <div className="h-px w-20" style={{ background: 'linear-gradient(to left, transparent, #C9A96E)' }} />
-      </motion.div>
-    </div>
-  )
-}
-
-/* ─── Neon category button ─── */
-function NeonButton({ cat, active, onClick }: {
-  cat: typeof CATEGORIES[0]; active: boolean; onClick: () => void
-}) {
-  return (
-    <motion.button
-      onClick={onClick}
-      variants={{
-        hidden: { opacity: 0, y: 40, scale: 0.7, rotateX: -30, filter: 'blur(8px)' },
-        visible: { opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)',
-          transition: { type: 'spring', stiffness: 220, damping: 22 } },
-      }}
-      whileHover={{ scale: 1.08, y: -4 }}
-      whileTap={{ scale: 0.94, y: 2 }}
-      className="relative flex items-center gap-2.5 px-6 py-3 font-cormorant font-semibold text-lg select-none overflow-hidden"
-      style={{
-        background: active
-          ? `rgba(${cat.glow},0.18)`
-          : 'rgba(10,3,6,0.6)',
-        border: `1px solid rgba(${cat.glow}, ${active ? 0.8 : 0.3})`,
-        color: active ? cat.border : 'rgba(245,230,234,0.65)',
-        backdropFilter: 'blur(12px)',
-        boxShadow: active
-          ? `0 0 20px rgba(${cat.glow},0.4), 0 0 40px rgba(${cat.glow},0.15), inset 0 0 20px rgba(${cat.glow},0.08)`
-          : `0 0 0px rgba(${cat.glow},0)`,
-        borderRadius: 4,
-        transition: 'all 0.3s ease',
-      }}
-    >
-      {/* Animated background shimmer when active */}
-      {active && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none"
-          animate={{ x: ['−100%', '100%'] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          style={{
-            background: `linear-gradient(90deg, transparent 0%, rgba(${cat.glow},0.15) 50%, transparent 100%)`,
-          }}
-        />
-      )}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="w-16 h-px bg-accent origin-right"
+      />
       <motion.span
-        animate={active ? { rotate: [0, -15, 15, 0], scale: [1, 1.35, 1.35, 1] } : {}}
-        transition={{ duration: 0.5 }}
-        className="text-xl relative z-10"
-      >{cat.emoji}</motion.span>
-      <span className="relative z-10">{cat.label}</span>
-    </motion.button>
+        initial={{ scale: 0, rotate: -180, opacity: 0 }}
+        animate={inView ? { scale: 1, rotate: 0, opacity: 1 } : {}}
+        transition={{ duration: 0.6, delay: 0.3, type: 'spring', stiffness: 300 }}
+        className="text-accent text-lg"
+      >
+        ✿
+      </motion.span>
+      <motion.div
+        initial={{ scaleX: 0, opacity: 0 }}
+        animate={inView ? { scaleX: 1, opacity: 1 } : {}}
+        transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        className="w-16 h-px bg-accent origin-left"
+      />
+    </div>
   )
 }
 
@@ -437,82 +254,111 @@ export default function FeaturedProducts() {
       .finally(() => setLoading(false))
   }, [activeCategory])
 
+  const activeCat = CATEGORIES.find(c => c.slug === activeCategory)
+
   return (
-    <section className="relative py-28 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, #080205 0%, #0D0306 40%, #130508 80%, #080205 100%)' }}
-    >
-      {/* Particle field background */}
-      <ParticleField />
+    <section className="py-24 bg-light/40 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      {/* Top & bottom fade */}
-      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to bottom, #FDF8F9, transparent)' }} />
-      <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to top, #FDF8F9, transparent)' }} />
+        {/* Heading */}
+        <motion.p
+          className="section-subheading"
+          initial={{ opacity: 0, letterSpacing: '0.5em' }}
+          whileInView={{ opacity: 1, letterSpacing: '0.25em' }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          Selecție
+        </motion.p>
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <AnimatedHeading text="Colecția Noastră" className="section-heading" />
+        <AnimatedDivider />
 
-        {/* Title */}
-        <GlowTitle text="Colecția Noastră" />
-
-        {/* Category filter */}
+        {/* Category filter — staggered 3D entrance */}
         <motion.div
           ref={catRef}
-          className="flex flex-wrap justify-center gap-3 mb-12"
+          className="flex flex-wrap justify-center gap-4 mb-14"
           initial="hidden"
           animate={catInView ? 'visible' : 'hidden'}
-          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.1 } } }}
         >
-          {CATEGORIES.map(cat => (
-            <NeonButton
-              key={cat.slug}
-              cat={cat}
-              active={activeCategory === cat.slug}
-              onClick={() => setActiveCategory(activeCategory === cat.slug ? null : cat.slug)}
-            />
-          ))}
+          {CATEGORIES.map(cat => {
+            const isActive = activeCategory === cat.slug
+            return (
+              <motion.button
+                key={cat.slug}
+                variants={{
+                  hidden: { opacity: 0, y: 35, scale: 0.75, rotateX: -25 },
+                  visible: { opacity: 1, y: 0, scale: 1, rotateX: 0, transition: { type: 'spring', stiffness: 250, damping: 22 } },
+                }}
+                onClick={() => setActiveCategory(isActive ? null : cat.slug)}
+                whileHover={{ y: -4, scale: 1.04 }}
+                whileTap={{ scale: 0.96, y: 4 }}
+                className="flex items-center gap-3 px-8 py-4 font-cormorant font-semibold text-xl tracking-wide select-none"
+                style={{
+                  background: cat.bg,
+                  color: cat.text,
+                  boxShadow: isActive ? `1px 1px 0px ${cat.shadow}` : `6px 6px 0px ${cat.shadow}`,
+                  borderRadius: 4,
+                  outline: isActive ? `2px solid ${cat.text}` : 'none',
+                  outlineOffset: 2,
+                  transition: 'box-shadow 0.15s, outline 0.1s',
+                }}
+              >
+                <motion.span
+                  className="text-2xl leading-none"
+                  animate={isActive ? { rotate: [0, -15, 15, 0], scale: [1, 1.3, 1.3, 1] } : {}}
+                  transition={{ duration: 0.5 }}
+                >
+                  {cat.emoji}
+                </motion.span>
+                <span>{cat.label}</span>
+              </motion.button>
+            )
+          })}
         </motion.div>
 
-        {/* Active label */}
+        {/* Category label */}
         <AnimatePresence>
-          {activeCategory && (
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: -10, filter: 'blur(6px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -10, filter: 'blur(6px)' }}
-              className="text-center mb-6"
+          {activeCat && (
+            <motion.p
+              key={activeCat.slug}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="font-lato text-xs tracking-widest uppercase text-textdark/40 text-center mb-6"
             >
-              <span className="font-lato text-xs tracking-widest uppercase" style={{ color: 'rgba(245,230,234,0.4)' }}>
-                Categorie: <span style={{ color: '#C9A96E' }}>{CATEGORIES.find(c => c.slug === activeCategory)?.label}</span>
-              </span>
-              <button onClick={() => setActiveCategory(null)}
-                className="ml-3 font-lato text-xs"
-                style={{ color: 'rgba(201,169,110,0.6)' }}
-              >× resetează</button>
-            </motion.div>
+              Categorie: <span className="font-semibold text-primary">{activeCat.label}</span>
+              <button onClick={() => setActiveCategory(null)} className="ml-3 text-accent hover:text-primary underline underline-offset-2">
+                × resetează
+              </button>
+            </motion.p>
           )}
         </AnimatePresence>
 
-        {/* Grid */}
+        {/* Products grid */}
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[1,2,3,4,5,6,7,8].map(i => (
-              <div key={i} className="rounded-xl overflow-hidden animate-pulse"
-                style={{ background: 'rgba(42,10,18,0.5)', border: '1px solid rgba(201,169,110,0.1)' }}
-              >
-                <div style={{ aspectRatio: '3/4', background: 'rgba(255,255,255,0.04)' }} />
-                <div className="p-4 space-y-3">
-                  <div className="h-4 rounded" style={{ background: 'rgba(255,255,255,0.06)', width: '70%' }} />
-                  <div className="h-3 rounded" style={{ background: 'rgba(255,255,255,0.04)' }} />
-                  <div className="h-3 rounded" style={{ background: 'rgba(255,255,255,0.03)', width: '60%' }} />
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                <div className="bg-light" style={{ aspectRatio: '3/4' }} />
+                <div className="p-5 space-y-3">
+                  <div className="h-2.5 bg-light rounded w-16" />
+                  <div className="h-5 bg-light rounded w-3/4" />
+                  <div className="h-3 bg-light rounded w-full" />
+                  <div className="h-3 bg-light rounded w-2/3" />
+                  <div className="h-8 bg-light rounded w-full mt-2" />
                 </div>
               </div>
             ))}
           </div>
         ) : products.length === 0 ? (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-            <p className="font-cormorant text-2xl font-light" style={{ color: 'rgba(245,230,234,0.5)' }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16"
+          >
+            <p className="font-cormorant text-2xl text-primary font-light mb-2">
               Nu există produse în această categorie momentan.
             </p>
           </motion.div>
@@ -520,13 +366,19 @@ export default function FeaturedProducts() {
           <motion.div
             key={activeCategory ?? 'all'}
             className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-            style={{ perspective: '1600px' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.4 }}
+            style={{ perspective: '1400px' }}
+            initial="hidden"
+            animate="visible"
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
           >
-            {products.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} />
+            {products.map(product => (
+              <motion.div
+                key={product.id}
+                variants={staggerItem}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <ProductCard product={product} />
+              </motion.div>
             ))}
           </motion.div>
         )}
@@ -537,34 +389,15 @@ export default function FeaturedProducts() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
           <MagneticButton strength={0.3}>
-            <Link href="/catalog"
-              className="inline-flex items-center gap-3 px-10 py-4 font-lato text-sm font-semibold tracking-widest uppercase"
-              style={{
-                background: 'transparent',
-                border: '1px solid rgba(201,169,110,0.5)',
-                color: '#C9A96E',
-                boxShadow: '0 0 20px rgba(201,169,110,0.1)',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget
-                el.style.background = 'rgba(201,169,110,0.12)'
-                el.style.boxShadow = '0 0 40px rgba(201,169,110,0.3)'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget
-                el.style.background = 'transparent'
-                el.style.boxShadow = '0 0 20px rgba(201,169,110,0.1)'
-              }}
-            >
+            <Link href="/catalog" className="btn-outline inline-flex items-center gap-2 group">
               <span>Vezi toate produsele</span>
-              <motion.span animate={{ x: [0, 6, 0] }} transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}>
-                →
-              </motion.span>
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
+              >→</motion.span>
             </Link>
           </MagneticButton>
         </motion.div>
