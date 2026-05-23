@@ -34,3 +34,23 @@ export async function updateBusinessHours(hours: BusinessHours): Promise<void> {
     updated_at: new Date().toISOString(),
   })
 }
+
+export async function getAdminPassword(): Promise<string> {
+  try {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'admin_password')
+      .single()
+    if (data?.value?.password) return data.value.password as string
+  } catch {}
+  return process.env.ADMIN_PASSWORD || 'clorys2024'
+}
+
+export async function setAdminPassword(password: string): Promise<void> {
+  await supabase.from('settings').upsert({
+    key: 'admin_password',
+    value: { password },
+    updated_at: new Date().toISOString(),
+  })
+}

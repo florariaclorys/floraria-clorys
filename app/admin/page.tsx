@@ -67,6 +67,21 @@ export default function AdminLoginPage() {
           <p className="font-lato text-xs text-textdark/30 text-center mt-6">
             Acces restricționat — numai personal autorizat
           </p>
+          <p className="font-lato text-xs text-center mt-3">
+            <button
+              type="button"
+              onClick={async () => {
+                const ok = window.confirm('Trimitem o parolă temporară la florariaclorys@gmail.com. Continui?')
+                if (!ok) return
+                const res = await fetch('/api/admin/reset-password', { method: 'POST' })
+                if (res.ok) alert('Parolă temporară trimisă pe email!')
+                else alert('Eroare la trimitere. Încearcă din nou.')
+              }}
+              className="text-accent hover:text-primary transition-colors underline"
+            >
+              Am uitat parola
+            </button>
+          </p>
         </div>
       </div>
     </div>

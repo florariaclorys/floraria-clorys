@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAdminPassword } from '@/lib/settings'
 
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json() as { password: string }
-    const adminPassword = process.env.ADMIN_PASSWORD || 'clorys2024'
+    const adminPassword = await getAdminPassword()
 
     if (password !== adminPassword) {
       return NextResponse.json({ error: 'Parolă incorectă' }, { status: 401 })
