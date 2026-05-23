@@ -101,10 +101,10 @@ function ProductCard({ product }: { product: Product }) {
     : product.category === 'plante' ? '🌱' : '✨'
 
   return (
-    <TiltCard className="group flex flex-col bg-white rounded-2xl overflow-hidden cursor-pointer relative">
+    <TiltCard className="group flex flex-col bg-white rounded-xl overflow-hidden cursor-pointer relative">
       <Link href={`/produs/${product.slug}`} className="flex flex-col flex-1">
         {/* Image */}
-        <div className="relative overflow-hidden bg-[#f9eef1]" style={{ aspectRatio: '3/4' }}>
+        <div className="relative overflow-hidden bg-[#f9eef1]" style={{ aspectRatio: '4/5' }}>
           {product.images?.[0] ? (
             <img
               src={product.images[0]}
@@ -115,7 +115,7 @@ function ProductCard({ product }: { product: Product }) {
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <motion.span
-                className="text-7xl filter drop-shadow"
+                className="text-5xl filter drop-shadow"
                 style={{ transformStyle: 'preserve-3d', translateZ: 30 }}
                 whileHover={{ scale: 1.15, rotate: [-3, 3, -3, 0] }}
                 transition={{ duration: 0.5 }}
@@ -126,7 +126,7 @@ function ProductCard({ product }: { product: Product }) {
           )}
 
           {product.isNew && (
-            <span className="absolute top-3 left-3 bg-green-600 text-white font-lato text-[10px] font-bold px-2.5 py-1 rounded-sm tracking-widest uppercase z-20">
+            <span className="absolute top-2 left-2 bg-green-600 text-white font-lato text-[9px] font-bold px-2 py-0.5 rounded-sm tracking-widest uppercase z-20">
               Nou
             </span>
           )}
@@ -135,32 +135,32 @@ function ProductCard({ product }: { product: Product }) {
           <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
             <button
               onClick={handleAdd}
-              className="w-full flex items-center justify-center gap-2 bg-primary/95 backdrop-blur-sm text-white py-3 font-lato text-xs font-semibold tracking-widest uppercase hover:bg-secondary transition-colors"
+              className="w-full flex items-center justify-center gap-1.5 bg-primary/95 backdrop-blur-sm text-white py-2.5 font-lato text-[11px] font-semibold tracking-widest uppercase hover:bg-secondary transition-colors"
             >
-              <ShoppingBag size={14} />
+              <ShoppingBag size={13} />
               Adaugă în coș
             </button>
           </div>
         </div>
 
         {/* Info */}
-        <div className="p-5 flex flex-col flex-1">
-          <p className="font-lato text-[10px] text-accent tracking-[0.2em] uppercase mb-2">{product.category}</p>
-          <h3 className="font-cormorant text-xl text-textdark font-semibold leading-snug mb-2 group-hover:text-primary transition-colors">
+        <div className="p-3 flex flex-col flex-1">
+          <p className="font-lato text-[9px] text-accent tracking-[0.2em] uppercase mb-1">{product.category}</p>
+          <h3 className="font-cormorant text-base text-textdark font-semibold leading-snug mb-1 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
-          <p className="font-lato text-xs text-textdark/55 leading-relaxed mb-4 line-clamp-2 flex-1">
+          <p className="font-lato text-[11px] text-textdark/55 leading-relaxed mb-3 line-clamp-2 flex-1">
             {product.shortDescription}
           </p>
-          <div className="flex items-center justify-between pt-3 border-t border-light">
-            <span className="font-cormorant text-2xl font-bold text-primary">
-              {product.price} <span className="text-sm font-lato font-normal">RON</span>
+          <div className="flex items-center justify-between pt-2.5 border-t border-light">
+            <span className="font-cormorant text-lg font-bold text-primary">
+              {product.price} <span className="text-xs font-lato font-normal">RON</span>
             </span>
             <button
               onClick={handleAdd}
-              className="flex items-center gap-1.5 bg-primary text-white px-4 py-2 text-[11px] font-lato font-semibold tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors"
+              className="flex items-center gap-1 bg-primary text-white px-3 py-1.5 text-[10px] font-lato font-semibold tracking-wider uppercase rounded-sm hover:bg-secondary transition-colors"
             >
-              <ShoppingBag size={13} />
+              <ShoppingBag size={11} />
               Adaugă
             </button>
           </div>
@@ -338,16 +338,16 @@ export default function FeaturedProducts() {
 
         {/* Products grid */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[1,2,3,4,5,6,7,8].map(i => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
+              <div key={i} className="bg-white rounded-xl overflow-hidden shadow-sm animate-pulse">
                 <div className="bg-light" style={{ aspectRatio: '3/4' }} />
-                <div className="p-5 space-y-3">
+                <div className="p-3 space-y-2">
                   <div className="h-2.5 bg-light rounded w-16" />
-                  <div className="h-5 bg-light rounded w-3/4" />
+                  <div className="h-4 bg-light rounded w-3/4" />
                   <div className="h-3 bg-light rounded w-full" />
                   <div className="h-3 bg-light rounded w-2/3" />
-                  <div className="h-8 bg-light rounded w-full mt-2" />
+                  <div className="h-7 bg-light rounded w-full mt-2" />
                 </div>
               </div>
             ))}
@@ -365,7 +365,7 @@ export default function FeaturedProducts() {
         ) : (
           <motion.div
             key={activeCategory ?? 'all'}
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             style={{ perspective: '1400px' }}
             initial="hidden"
             animate="visible"
