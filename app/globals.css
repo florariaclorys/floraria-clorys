@@ -127,3 +127,83 @@ a, button { transition: color 0.2s, background-color 0.2s, border-color 0.2s, op
   box-shadow: var(--cat-shadow-hover, 2px 2px 0px #2A0A12) !important;
   transform: translate(4px, 4px);
 }
+
+/* ═══════════════════════════════════════════
+   HERO IMMERSIVE — animations & cursor
+═══════════════════════════════════════════ */
+
+@keyframes heroPetalFall {
+  0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg); opacity: 0; }
+}
+
+@keyframes heroScrollArrow {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50%       { opacity: 1;   transform: translateX(5px); }
+}
+
+@keyframes hiTickerAnim {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-33.3334%); }
+}
+.hi-ticker-track {
+  display: flex;
+  animation: hiTickerAnim 22s linear infinite;
+  white-space: nowrap;
+}
+.hi-ticker-track:hover { animation-play-state: paused; }
+
+.hi-card { transition: opacity 0.5s ease; }
+
+.hi-btn { transition: background 0.28s ease, border-color 0.28s ease !important; }
+.hi-btn:hover {
+  background: rgba(201,168,76,.14) !important;
+  border-color: rgba(201,168,76,.7) !important;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Custom cursor ── */
+#clorys-cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: #C9A84C;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  left: -40px; top: -40px;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: width 0.18s ease, height 0.18s ease, opacity 0.3s;
+}
+#clorys-cursor.hi-cur-big { width: 20px; height: 20px; }
+
+#clorys-cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,.42);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  left: -60px; top: -60px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: width 0.28s ease, height 0.28s ease, opacity 0.3s;
+}
+#clorys-cursor-ring.hi-ring-big { width: 56px; height: 56px; }
+
+@media (hover: hover) and (pointer: fine) { * { cursor: none !important; } }
+@media (hover: none) { #clorys-cursor, #clorys-cursor-ring { display: none !important; } }
+
+/* ── Grain texture overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.42;
+}
