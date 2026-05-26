@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast'
 import PublicLayout from '@/components/layout/PublicLayout'
 import CursorSparkles from '@/components/ui/CursorSparkles'
 import ScrollProgress from '@/components/ui/ScrollProgress'
-import CursorCustom from '@/components/ui/CursorCustom'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://myclorys.com'),
@@ -69,17 +68,13 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Lato:wght@200;300;400;700;900&family=Great+Vibes&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Lato:wght@300;400;700;900&family=Great+Vibes&display=swap"
           rel="stylesheet"
         />
       </head>
       <body className="font-lato bg-background text-textdark">
-        {/* Custom cursor elements */}
-        <div id="clorys-cursor" />
-        <div id="clorys-cursor-ring" />
         <ScrollProgress />
         <CursorSparkles />
-        <CursorCustom />
         <CartProvider>
           <PublicLayout>
             {children}

@@ -1,12 +1,11 @@
-import HeroImmersive, { TickerBar } from '@/components/home/HeroImmersive'
+import HeroSection from '@/components/home/HeroSection'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 
 export default function HomePage() {
   return (
     <>
-      <HeroImmersive />
-      <TickerBar />
+      <HeroSection />
       <FeaturedProducts />
       <TestimonialsSection />
     </>
