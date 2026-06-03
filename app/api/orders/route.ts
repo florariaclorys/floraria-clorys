@@ -4,6 +4,7 @@ import { useDiscount } from '@/lib/discounts'
 import { sendOrderConfirmationToCustomer, sendOrderNotificationToFlorist } from '@/lib/email'
 import { cookies } from 'next/headers'
 import { Order } from '@/types'
+import { getOrderBlock } from '@/lib/settings'
 
 function isAdmin(): boolean {
   const cookieStore = cookies()
@@ -18,24 +19,20 @@ export async function GET() {
   return NextResponse.json(orders)
 }
 
-// Zilele în care comenzile sunt blocate (format: YYYY-MM-DD, ora României UTC+3)
-const BLOCKED_DATES = ['2026-06-03', '2026-06-04']
-
-function isBlockedDay(): boolean {
-  const now = new Date()
-  // Ora României (UTC+3 vara)
-  const roDate = new Date(now.getTime() + 3 * 60 * 60 * 1000)
-  const today = roDate.toISOString().slice(0, 10)
-  return BLOCKED_DATES.includes(today)
-}
-
 export async function POST(request: NextRequest) {
   try {
-    if (isBlockedDay()) {
-      return NextResponse.json(
-        { error: 'Ne pare rău, florăria nu preia comenzi online astăzi. Te rugăm să revii mâine sau să ne contactezi direct.' },
-        { status: 503 }
-      )
+    // Verifică blocarea comenzilor din Supabase
+    const block = await getOrderBlock()
+    if (block.active && block.blockedDates.length > 0) {
+      const now = new Date()
+      const roDate = new Date(now.getTime() + 3 * 60 * 60 * 1000)
+      const today = roDate.toISOString().slice(0, 10)
+      if (block.blockedDates.includes(today)) {
+        return NextResponse.json(
+          { error: 'Ne pare rău, florăria nu preia comenzi online astăzi. Te rugăm să revii în curând sau să ne contactezi direct.' },
+          { status: 503 }
+        )
+      }
     }
 
     const body = await request.json()

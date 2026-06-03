@@ -3,24 +3,20 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const BLOCKED_DATES = ['2026-06-03', '2026-06-04']
-
-function isBlockedDay(): boolean {
-  const now = new Date()
-  const roDate = new Date(now.getTime() + 3 * 60 * 60 * 1000)
-  const today = roDate.toISOString().slice(0, 10)
-  return BLOCKED_DATES.includes(today)
-}
-
 export default function ClosedPopup() {
   const [visible, setVisible] = useState(false)
+  const [returnDate, setReturnDate] = useState('')
 
   useEffect(() => {
-    if (isBlockedDay()) {
-      // Mică întârziere ca să apară după ce se încarcă pagina
-      const t = setTimeout(() => setVisible(true), 600)
-      return () => clearTimeout(t)
-    }
+    fetch('/api/orders/pause')
+      .then(r => r.json())
+      .then(data => {
+        if (data.isBlockedToday) {
+          setReturnDate(data.returnDate || '')
+          setTimeout(() => setVisible(true), 600)
+        }
+      })
+      .catch(() => {})
   }, [])
 
   return (
@@ -106,7 +102,7 @@ export default function ClosedPopup() {
                 style={{ color: 'rgba(255,255,255,0.7)' }}
               >
                 Datorită volumului mare de comenzi, florăria noastră
-                nu poate prelua comenzi online <strong style={{ color: 'rgba(255,255,255,0.9)' }}>astăzi și mâine</strong>.
+                nu poate prelua comenzi online <strong style={{ color: 'rgba(255,255,255,0.9)' }}>în această perioadă</strong>.
               </motion.p>
 
               <motion.p
@@ -117,7 +113,11 @@ export default function ClosedPopup() {
                 style={{ color: 'rgba(255,255,255,0.7)' }}
               >
                 Îți mulțumim pentru înțelegere și te așteptăm cu drag
-                începând de <strong style={{ color: '#C9A96E' }}>joi, 5 iunie</strong>. 🌷
+                {returnDate ? (
+                  <> începând de <strong style={{ color: '#C9A96E' }}>{returnDate}</strong>. 🌷</>
+                ) : (
+                  <> în curând. 🌷</>
+                )}
               </motion.p>
 
               {/* Contact direct */}
@@ -132,11 +132,11 @@ export default function ClosedPopup() {
                   Ne poți găsi la
                 </p>
                 <a
-                  href="tel:+40742000000"
-                  className="font-cormorant text-xl font-semibold block hover:text-gold transition-colors"
+                  href="tel:+40770930786"
+                  className="font-cormorant text-2xl font-semibold block transition-colors hover:opacity-80"
                   style={{ color: '#fff' }}
                 >
-                  📞 Sună-ne direct
+                  📞 0770 930 786
                 </a>
                 <p className="font-lato text-xs mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
                   sau vizitează-ne în Negrești-Oaș

@@ -35,6 +35,34 @@ export async function updateBusinessHours(hours: BusinessHours): Promise<void> {
   })
 }
 
+export interface OrderBlock {
+  active: boolean
+  blockedDates: string[]   // ex: ['2026-06-03', '2026-06-04']
+  returnDate: string       // ex: 'vineri, 5 iunie'
+}
+
+const DEFAULT_BLOCK: OrderBlock = { active: false, blockedDates: [], returnDate: '' }
+
+export async function getOrderBlock(): Promise<OrderBlock> {
+  try {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'order_block')
+      .single()
+    if (data?.value) return data.value as OrderBlock
+  } catch {}
+  return DEFAULT_BLOCK
+}
+
+export async function setOrderBlock(block: OrderBlock): Promise<void> {
+  await supabase.from('settings').upsert({
+    key: 'order_block',
+    value: block,
+    updated_at: new Date().toISOString(),
+  })
+}
+
 export async function getAdminPassword(): Promise<string> {
   try {
     const { data } = await supabase
