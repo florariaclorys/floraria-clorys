@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const BLOCKED_DATES = ['2026-05-27', '2026-05-28']
+const BLOCKED_DATES = ['2026-06-03', '2026-06-04']
 
 function isBlockedDay(): boolean {
   const now = new Date()
@@ -117,7 +117,7 @@ export default function ClosedPopup() {
                 style={{ color: 'rgba(255,255,255,0.7)' }}
               >
                 Îți mulțumim pentru înțelegere și te așteptăm cu drag
-                începând de <strong style={{ color: '#C9A96E' }}>joi, 29 mai</strong>. 🌷
+                începând de <strong style={{ color: '#C9A96E' }}>joi, 5 iunie</strong>. 🌷
               </motion.p>
 
               {/* Contact direct */}

@@ -19,7 +19,7 @@ export async function GET() {
 }
 
 // Zilele în care comenzile sunt blocate (format: YYYY-MM-DD, ora României UTC+3)
-const BLOCKED_DATES = ['2026-05-27', '2026-05-28']
+const BLOCKED_DATES = ['2026-06-03', '2026-06-04']
 
 function isBlockedDay(): boolean {
   const now = new Date()
