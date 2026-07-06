@@ -12,7 +12,7 @@ function CheckoutContent() {
 
   const discountAmount = Number(searchParams.get('discount') || 0)
   const discountCode = searchParams.get('code') || ''
-  const deliveryFee = 0
+  const deliveryFee = Number(searchParams.get('fee') || 0)
   const total = Number(searchParams.get('total') || cartTotal)
   const fulfillmentMethod = (searchParams.get('fulfillment') || 'livrare') as 'livrare' | 'ridicare'
 

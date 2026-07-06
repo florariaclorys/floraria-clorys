@@ -63,6 +63,50 @@ export async function setOrderBlock(block: OrderBlock): Promise<void> {
   })
 }
 
+export interface DeliverySettings {
+  homeDeliveryFee: number   // taxă livrare la domiciliu (RON)
+  freeOverAmount: number    // livrare gratuită peste această sumă (0 = dezactivat)
+}
+
+const DEFAULT_DELIVERY: DeliverySettings = { homeDeliveryFee: 20, freeOverAmount: 0 }
+
+export async function getDeliverySettings(): Promise<DeliverySettings> {
+  try {
+    const { data } = await supabase
+      .from('settings')
+      .select('value')
+      .eq('key', 'delivery')
+      .single()
+    if (data?.value) {
+      const v = data.value as Partial<DeliverySettings>
+      return {
+        homeDeliveryFee: Number(v.homeDeliveryFee ?? DEFAULT_DELIVERY.homeDeliveryFee),
+        freeOverAmount: Number(v.freeOverAmount ?? DEFAULT_DELIVERY.freeOverAmount),
+      }
+    }
+  } catch {}
+  return DEFAULT_DELIVERY
+}
+
+export async function setDeliverySettings(settings: DeliverySettings): Promise<void> {
+  await supabase.from('settings').upsert({
+    key: 'delivery',
+    value: settings,
+    updated_at: new Date().toISOString(),
+  })
+}
+
+// Calcul taxă livrare — folosit atât la afișare (coș) cât și autoritar pe server (comandă)
+export function computeDeliveryFee(
+  settings: DeliverySettings,
+  fulfillmentMethod: 'livrare' | 'ridicare',
+  afterDiscountSubtotal: number
+): number {
+  if (fulfillmentMethod === 'ridicare') return 0
+  if (settings.freeOverAmount > 0 && afterDiscountSubtotal >= settings.freeOverAmount) return 0
+  return Math.max(0, settings.homeDeliveryFee)
+}
+
 export async function getAdminPassword(): Promise<string> {
   try {
     const { data } = await supabase

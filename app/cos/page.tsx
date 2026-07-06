@@ -4,16 +4,25 @@ import Link from 'next/link'
 import { Trash2, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/context/CartContext'
 import DiscountCode from '@/components/cart/DiscountCode'
-import { useState } from 'react'
-
-const DELIVERY_FEE = 0
-const FREE_DELIVERY_THRESHOLD = 0
+import { useState, useEffect } from 'react'
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, cartTotal } = useCart()
   const [discountAmount, setDiscountAmount] = useState(0)
   const [discountCode, setDiscountCode] = useState('')
   const [fulfillmentMethod, setFulfillmentMethod] = useState<'livrare' | 'ridicare'>('livrare')
+  const [homeDeliveryFee, setHomeDeliveryFee] = useState(0)
+  const [freeOverAmount, setFreeOverAmount] = useState(0)
+
+  useEffect(() => {
+    fetch('/api/delivery')
+      .then(r => r.json())
+      .then(data => {
+        setHomeDeliveryFee(Number(data.homeDeliveryFee) || 0)
+        setFreeOverAmount(Number(data.freeOverAmount) || 0)
+      })
+      .catch(() => {})
+  }, [])
 
   const handleDiscount = (amount: number, code: string) => {
     setDiscountAmount(amount)
@@ -21,7 +30,12 @@ export default function CartPage() {
   }
 
   const afterDiscount = Math.max(0, cartTotal - discountAmount)
-  const deliveryFee = afterDiscount >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE
+  const deliveryFee =
+    fulfillmentMethod === 'ridicare'
+      ? 0
+      : freeOverAmount > 0 && afterDiscount >= freeOverAmount
+        ? 0
+        : homeDeliveryFee
   const total = afterDiscount + deliveryFee
 
   if (items.length === 0) {
@@ -125,8 +139,12 @@ export default function CartPage() {
                   </div>
                 )}
                 <div className="flex justify-between font-lato text-sm text-textdark/70">
-                  <span>Livrare</span>
-                  <span className="text-green-600 font-semibold">GRATUIT</span>
+                  <span>Livrare {fulfillmentMethod === 'ridicare' ? '(ridicare)' : ''}</span>
+                  {deliveryFee === 0 ? (
+                    <span className="text-green-600 font-semibold">GRATUIT</span>
+                  ) : (
+                    <span className="font-semibold">{deliveryFee} RON</span>
+                  )}
                 </div>
               </div>
 
@@ -134,15 +152,19 @@ export default function CartPage() {
 
               {/* Delivery info cards */}
               <div className="mt-4 grid grid-cols-2 gap-2">
-                <div className="border border-green-200 bg-green-50 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
+                <div className="border border-primary/15 bg-primary/5 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
                   <span className="text-lg">🚚</span>
-                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Livrare gratuită</p>
-                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">Negrești-Oaș</p>
+                  <p className="font-lato text-[10px] font-bold text-primary leading-tight">Livrare la domiciliu</p>
+                  <p className="font-lato text-[9px] text-textdark/60 leading-tight">
+                    {homeDeliveryFee === 0 ? 'Gratuită' : `${homeDeliveryFee} RON · Negrești-Oaș și împrejurimi`}
+                  </p>
                 </div>
                 <div className="border border-green-200 bg-green-50 rounded-lg px-3 py-2.5 flex flex-col items-center text-center gap-1">
-                  <span className="text-lg">📍</span>
-                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Împrejurimi</p>
-                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">· la orice comandă de minimum 250 RON</p>
+                  <span className="text-lg">🏪</span>
+                  <p className="font-lato text-[10px] font-bold text-green-800 leading-tight">Ridicare din magazin</p>
+                  <p className="font-lato text-[9px] text-green-700/70 leading-tight">
+                    {freeOverAmount > 0 ? `sau livrare gratuită peste ${freeOverAmount} RON` : 'Gratuit, oricând'}
+                  </p>
                 </div>
               </div>
 

@@ -4,7 +4,7 @@ import { useDiscount } from '@/lib/discounts'
 import { sendOrderConfirmationToCustomer, sendOrderNotificationToFlorist } from '@/lib/email'
 import { cookies } from 'next/headers'
 import { Order } from '@/types'
-import { getOrderBlock } from '@/lib/settings'
+import { getOrderBlock, getDeliverySettings, computeDeliveryFee } from '@/lib/settings'
 
 function isAdmin(): boolean {
   const cookieStore = cookies()
@@ -40,11 +40,8 @@ export async function POST(request: NextRequest) {
     const {
       customer,
       items,
-      subtotal,
       discountCode,
       discountAmount,
-      deliveryFee,
-      total,
       deliveryDate,
       deliveryTimeSlot,
       giftMessage,
@@ -62,19 +59,28 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Data și ora livrării sunt obligatorii' }, { status: 400 })
     }
 
+    // Recalcul autoritar pe server (nu ne bazăm pe totalul trimis de client)
+    const method: 'livrare' | 'ridicare' = fulfillmentMethod === 'ridicare' ? 'ridicare' : 'livrare'
+    const computedSubtotal = items.reduce((s, i) => s + i.price * i.quantity, 0)
+    const safeDiscount = Math.max(0, discountAmount || 0)
+    const afterDiscount = Math.max(0, computedSubtotal - safeDiscount)
+    const deliverySettings = await getDeliverySettings()
+    const computedFee = computeDeliveryFee(deliverySettings, method, afterDiscount)
+    const computedTotal = afterDiscount + computedFee
+
     const order = await createOrder({
       customer,
       items,
-      subtotal,
+      subtotal: computedSubtotal,
       discountCode,
-      discountAmount: discountAmount || 0,
-      deliveryFee: 0,
-      total,
+      discountAmount: safeDiscount,
+      deliveryFee: computedFee,
+      total: computedTotal,
       deliveryDate,
       deliveryTimeSlot,
       giftMessage,
       paymentMethod,
-      fulfillmentMethod: fulfillmentMethod || 'livrare',
+      fulfillmentMethod: method,
     })
 
     // Use discount if present

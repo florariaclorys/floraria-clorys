@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { getBusinessHours, getOrderBlock } from '@/lib/settings'
+import { getBusinessHours, getOrderBlock, getDeliverySettings } from '@/lib/settings'
 import AdminShell from '@/components/admin/AdminShell'
 import HoursForm from '@/components/admin/HoursForm'
 import PasswordForm from '@/components/admin/PasswordForm'
 import OrderBlockForm from '@/components/admin/OrderBlockForm'
+import DeliveryForm from '@/components/admin/DeliveryForm'
 
 function isAdminAuthenticated(): boolean {
   const cookieStore = cookies()
@@ -14,9 +15,10 @@ function isAdminAuthenticated(): boolean {
 export default async function SetariPage() {
   if (!isAdminAuthenticated()) redirect('/admin')
 
-  const [hours, orderBlock] = await Promise.all([
+  const [hours, orderBlock, delivery] = await Promise.all([
     getBusinessHours(),
     getOrderBlock(),
+    getDeliverySettings(),
   ])
 
   return (
@@ -34,6 +36,15 @@ export default async function SetariPage() {
             Când e activ, clienții văd un popup și nu pot plasa comenzi în zilele selectate.
           </p>
           <OrderBlockForm initial={orderBlock} />
+        </div>
+
+        {/* Prețuri livrare */}
+        <div className="bg-white border border-light rounded-xl p-6 mb-6">
+          <h2 className="font-cormorant text-2xl text-textdark font-semibold mb-1">Prețuri livrare</h2>
+          <p className="font-lato text-sm text-textdark/50 mb-6">
+            Stabilește taxa de livrare la domiciliu. Ridicarea din magazin este întotdeauna gratuită.
+          </p>
+          <DeliveryForm initial={delivery} />
         </div>
 
         {/* Program de lucru */}
