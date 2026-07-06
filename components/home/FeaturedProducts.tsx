@@ -35,8 +35,6 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
   const rotateY = useTransform(x, [-0.5, 0.5], [-12, 12])
   const glowX   = useTransform(x, [-0.5, 0.5], [20, 80])
   const glowY   = useTransform(y, [-0.5, 0.5], [20, 80])
-  const shadowX = useTransform(x, [-0.5, 0.5], [-20, 20])
-  const shadowY = useTransform(y, [-0.5, 0.5], [-20, 20])
 
   const onMouseMove = (e: React.MouseEvent) => {
     const rect = ref.current?.getBoundingClientRect()
@@ -55,11 +53,8 @@ function TiltCard({ children, className }: { children: React.ReactNode; classNam
         rotateX, rotateY,
         transformStyle: 'preserve-3d',
         perspective: 900,
-        boxShadow: useTransform(
-          [shadowX, shadowY],
-          ([sx, sy]: number[]) =>
-            `${sx}px ${sy + 8}px 40px rgba(42,10,18,0.18), 0 2px 8px rgba(42,10,18,0.08)`
-        ),
+        willChange: 'transform',
+        boxShadow: '0 8px 40px rgba(42,10,18,0.18), 0 2px 8px rgba(42,10,18,0.08)',
       }}
       className={className}
     >
@@ -109,6 +104,8 @@ function ProductCard({ product }: { product: Product }) {
             <img
               src={product.images[0]}
               alt={product.name}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-108"
               style={{ transition: 'transform 0.7s cubic-bezier(0.22,1,0.36,1)' }}
             />

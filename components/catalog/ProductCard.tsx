@@ -44,6 +44,8 @@ export default function ProductCard({ product }: { product: Product }) {
               <img
                 src={product.images[0]}
                 alt={product.name}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
             ) : (
