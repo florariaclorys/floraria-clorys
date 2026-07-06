@@ -12,6 +12,7 @@ export default function PasswordForm() {
   const [resetLoading, setResetLoading] = useState(false)
   const [showCurrent, setShowCurrent] = useState(false)
   const [showNew, setShowNew] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const handleChange = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -111,14 +112,25 @@ export default function PasswordForm() {
         {/* Confirmare */}
         <div>
           <label className="label-field">Confirmă parola nouă</label>
-          <input
-            type="password"
-            value={confirm}
-            onChange={e => setConfirm(e.target.value)}
-            className={`input-field ${confirm && newPass !== confirm ? 'border-red-400' : ''}`}
-            placeholder="Repetă parola nouă"
-            required
-          />
+          <div className="relative">
+            <input
+              type={showConfirm ? 'text' : 'password'}
+              value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              className={`input-field pr-11 ${confirm && newPass !== confirm ? 'border-red-400' : ''}`}
+              placeholder="Repetă parola nouă"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirm(s => !s)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-textdark/40 hover:text-primary transition-colors"
+              aria-label={showConfirm ? 'Ascunde parola' : 'Arată parola'}
+              tabIndex={-1}
+            >
+              {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
           {confirm && newPass !== confirm && (
             <p className="text-red-500 text-xs mt-1">Parolele nu coincid</p>
           )}
